@@ -10,3 +10,5 @@ config-windows.yaml
 devopos-toys.ca.crt
 kubeconfig
 kuttl-minimal.yaml
+ca.crt
+ca.key

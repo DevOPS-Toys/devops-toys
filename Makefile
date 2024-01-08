@@ -84,13 +84,13 @@ ca: ca_key ca_cert ca_cert_secret ca_trusted
 
 # Generate a CA key
 ca_key:
-	openssl genrsa -out /tmp/ca.key 4096
+	openssl genrsa -out ca.key 4096
 
 # Generate a CA certificate
 ca_cert:
 	openssl req -new -x509 -sha256 -days 3650 \
-  	-key /tmp/ca.key \
-  	-out /tmp/ca.crt \
+  	-key ca.key \
+  	-out ca.crt \
   	-subj '/CN=$(CN)/emailAddress=$(GITHUB_EMAIL)/C=$(C)/ST=$(ST)/L=$(L)/O=$(O)/OU=$(OU)'
 
 # Create a CA certificate secret
@@ -98,8 +98,8 @@ ca_cert_secret:
 	kubectl --namespace cert-manager \
   create secret \
   generic local.devops-ca \
-  --from-file=tls.key=/tmp/ca.key \
-  --from-file=tls.crt=/tmp/ca.crt \
+  --from-file=tls.key=ca.key \
+  --from-file=tls.crt=ca.crt \
   --output json \
   --dry-run=client | \
   kubeseal --format yaml \
@@ -114,10 +114,10 @@ ca_cert_secret:
 # Add the CA certificate to the trusted certificates
 ca_trusted:
 	# For Arch Linux
-	sudo cp /tmp/ca.crt /etc/ca-certificates/trust-source/anchors
+	sudo cp ca.crt /etc/ca-certificates/trust-source/anchors
 	sudo update-ca-trust
 	# For Debian/Ubuntu
-	#sudo cp cert-manager/ca.crt /usr/local/share/ca-certificates
+	#sudo cp ca.crt /usr/local/share/ca-certificates
 	#sudo update-ca-certificates
 
 minio: minio_users minio_root
