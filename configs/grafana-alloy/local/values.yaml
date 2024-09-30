@@ -1,2 +1,5 @@
 nameOverride: grafana-alloy
 fullnameOverride: grafana-alloy
+
+serviceMonitor:
+  enabled: true
