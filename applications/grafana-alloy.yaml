@@ -30,6 +30,13 @@ spec:
             releaseName: grafana-alloy
             valueFiles:
               - $values/configs/grafana-alloy/{{cluster}}/values.yaml
+        - repoURL: https://prometheus-community.github.io/helm-charts
+          chart: prometheus-operator-crds
+          targetRevision: 7.*.*
+          helm:
+            releaseName: kube-prometheus-stack-crds
+            valueFiles:
+              - $values/configs/kube-prometheus-stack-crds/{{cluster}}/values.yaml
         - repoURL: https://github.com/tomasz-wostal-eu/devops-toys.git
           targetRevision: dev
           ref: values
