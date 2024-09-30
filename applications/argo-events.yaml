@@ -32,7 +32,7 @@ spec:
           ref: values
         - repoURL: https://github.com/tomasz-wostal-eu/devops-toys.git
           path: configs/argo-events/{{cluster}}/extras
-          targetRevision: v0.2
+          targetRevision: dev
       syncPolicy:
         automated:
           selfHeal: true
