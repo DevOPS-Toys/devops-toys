@@ -56,7 +56,14 @@ cert-manager:
 	sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ca.crt
 	kubectl apply -f ./applications/cert-manager.yaml
 
-all: cluster initial-argocd-setup grafana-alloy sealed-secrets ingress-nginx cert-manager
+configure-argocd:
+	ARGOCD_PASSWORD=$$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) && echo $$ARGOCD_PASSWORD
+	kubectl port-forward -n argocd svc/argocd-server 8081:80 & echo $$! > /tmp/port-forward.pid & sleep 5
+	argocd login localhost:8081 --insecure --grpc-web --username admin --password $$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+	argocd account update-password --current-password $$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) --new-password $(ARGOCD_PASSWORD)
+	kill $$(cat /tmp/port-forward.pid) && rm -f /tmp/port-forward.pid
+
+all: cluster initial-argocd-setup grafana-alloy sealed-secrets ingress-nginx cert-manager configure-argocd
 
 # Teardown 
 destroy:
