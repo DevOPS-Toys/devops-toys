@@ -19,14 +19,14 @@ initial-argocd-setup:
 	kubectl apply -n argocd -f ./bootstrap/projects.yaml
 
 grafana-alloy:
-	kubectl apply -f ./applications/grafana-alloy
+	kubectl apply -f ./applications/grafana-alloy.yaml
 
 sealed-secrets:
-	kubectl apply -f ./applications/sealed-secrets
+	kubectl apply -f ./applications/sealed-secrets.yaml
 	sleep 60
 
 ingress-nginx:
-	kubectl apply -f ./applications/ingress-nginx
+	kubectl apply -f ./applications/ingress-nginx.yaml
 
 cert-manager:
 	kubectl create namespace cert-manager
@@ -54,7 +54,7 @@ cert-manager:
 	git commit -m "Add CA cert secret"
 	git push
 	sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ca.crt
-	kubectl apply -f ./applications/cert-manager
+	kubectl apply -f ./applications/cert-manager.yaml
 
 all: cluster initial-argocd-setup grafana-alloy sealed-secrets ingress-nginx cert-manager
 
