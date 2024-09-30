@@ -59,7 +59,7 @@ server:
       selector:
         release: prometheus
   ingress:
-    enabled: true
+    enabled: false
     annotations:
       cert-manager.io/cluster-issuer: devops-local
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
@@ -69,7 +69,7 @@ server:
     path: /
     tls: true
   ingressGrpc:
-    enabled: true
+    enabled: false
     ingressClassName: nginx
 
 applicationSet:
