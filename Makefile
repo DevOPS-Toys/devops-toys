@@ -57,6 +57,8 @@ cert-manager:
 	kubectl apply -f ./applications/cert-manager.yaml
 
 configure-argocd:
+	kubectl apply -f ./applications/argo-cd.yaml
+	sleep 60
 	ARGOCD_PASSWORD=$$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) && echo $$ARGOCD_PASSWORD
 	kubectl port-forward -n argocd svc/argocd-server 8081:80 & echo $$! > /tmp/port-forward.pid & sleep 5
 	argocd login localhost:8081 --insecure --grpc-web --username admin --password $$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)

@@ -69,7 +69,7 @@ server:
     path: /
     tls: true
   ingressGrpc:
-    enabled: false
+    enabled: true
     ingressClassName: nginx
 
 applicationSet:
