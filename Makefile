@@ -84,6 +84,21 @@ cloudflare:
 		--controller-namespace=sealed-secrets | \
 		tee ./configs/cloudflare/local/extras/secret-api-key.yaml
 
+external-dns:
+	kubectl create namespace external-dns
+	kubectl --namespace external-dns \
+		create secret \
+		generic cloudflare-api-key \
+		--from-literal=apiKey=$(CLOUDFLARE_API_KEY) \
+		--from-literal=email=$(CLOUDFLARE_EMAIL) \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		tee ./configs/external-dns/local/extras/secret-api-key.yaml
+	kubectl apply -f ./applications/external-dns.yaml
+
 configure-argocd:
 	kubectl apply -f ./applications/argo-cd.yaml
 	sleep 60
