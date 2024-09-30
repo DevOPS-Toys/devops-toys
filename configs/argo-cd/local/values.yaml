@@ -34,7 +34,7 @@ configs:
       g, watcher, role:application-watcher
 controller:
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
       enabled: false
       # labels:
@@ -44,7 +44,7 @@ controller:
 dex:
   enabled: false
   serviceMonitor:
-    enabled: false
+    enabled: true
     labels:
       release: prometheus
     selector:
