@@ -20,6 +20,8 @@ configs:
   params:
     applicationsetcontroller.policy: sync
     applicationsetcontroller.enable.progressive.syncs: true
+  repositories:
+    
 controller:
   metrics:
     enabled: false

@@ -8,6 +8,7 @@ cluster:
 	@echo "Creating local Kubernetes cluster"
 	kind create cluster --config ./kind/cluster-local.yaml
 
+.ONESHELL:
 initial-argocd-setup:
 	helm repo add argo https://argoproj.github.io/argo-helm --force-update
 	helm upgrade --install \
@@ -15,7 +16,8 @@ initial-argocd-setup:
 		--namespace argocd \
 		--create-namespace \
 		--wait
-
+	kubectl apply -n argocd -f bootstrap/projects.yaml
+	
 all: cluster
 
 # Teardown 
