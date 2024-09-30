@@ -36,11 +36,11 @@ spec:
         - repoURL: https://github.com/tomasz-wostal-eu/devops-toys.git
           path: configs/cert-manager/{{cluster}}/extras
           targetRevision: dev
-        - repoURL: https://aureq.github.io/cert-manager-webhook-ovh/
-          chart: cert-manager-webhook-ovh
-          targetRevision: 0.4.2
-          helm:
-            releaseName: cm-webhook-ovh
+        # - repoURL: https://aureq.github.io/cert-manager-webhook-ovh/
+        #   chart: cert-manager-webhook-ovh
+        #   targetRevision: 0.4.2
+        #   helm:
+        #     releaseName: cm-webhook-ovh
       syncPolicy:
         automated:
           selfHeal: true
