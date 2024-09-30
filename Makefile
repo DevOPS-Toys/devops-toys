@@ -15,6 +15,7 @@ initial-argocd-setup:
 		argocd argo/argo-cd \
 		--namespace argocd \
 		--create-namespace \
+		-f configs/argo-cd/local/values.yaml \
 		--wait
 	kubectl apply -n argocd -f bootstrap/projects.yaml
 	
