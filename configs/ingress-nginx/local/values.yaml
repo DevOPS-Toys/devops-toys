@@ -6,9 +6,9 @@ controller:
   enableSnippets: true
   allowSnippetAnnotations: true
   opentelemetry:
-    enabled: true
+    enabled: false
   metrics:
-    enabled: true
+    enabled: false
     service:
       annotations:
         prometheus.io/scrape: "true"
@@ -16,7 +16,7 @@ controller:
       labels:
         release: prometheus
     serviceMonitor:
-      enabled: true
+      enabled: false
       additionalLabels:
         release: prometheus
   hostPort:
