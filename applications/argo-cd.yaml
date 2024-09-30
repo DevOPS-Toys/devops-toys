@@ -28,7 +28,7 @@ spec:
           helm:
             releaseName: argo-cd
             valueFiles:
-              - $values/configs/ingress-nginx/{{cluster}}/values.yaml
+              - $values/configs/argo-cd/{{cluster}}/values.yaml
         - repoURL: https://github.com/tomasz-wostal-eu/devops-toys.git
           targetRevision: dev
           ref: values
