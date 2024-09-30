@@ -8,17 +8,17 @@ controller:
   opentelemetry:
     enabled: false
   metrics:
-    enabled: false
-    service:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "10254"
-      labels:
-        release: prometheus
+    enabled: true
+    # service:
+    #   annotations:
+    #     prometheus.io/scrape: "true"
+    #     prometheus.io/port: "10254"
+    #   labels:
+    #     release: prometheus
     serviceMonitor:
-      enabled: false
-      additionalLabels:
-        release: prometheus
+      enabled: true
+      # additionalLabels:
+      #   release: prometheus
   hostPort:
     enabled: true
   terminationGracePeriodSeconds: 0

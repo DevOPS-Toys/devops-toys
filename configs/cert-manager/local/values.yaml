@@ -1,13 +1,7 @@
 installCRDs: true
 prometheus:
-  enabled: false
+  enabled: true
   servicemonitor:
-    enabled: false
-    prometheusInstance: prometheus-prometheus
-    labels:
-      release: prometheus
+    enabled: true
   podmonitor:
-    enabled: false
-    prometheusInstance: prometheus-prometheus
-    labels:
-      release: prometheus
+    enabled: true
