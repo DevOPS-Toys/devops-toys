@@ -5,7 +5,7 @@ cloudflare:
   tunnelId: f951b180-f316-400f-a34e-9a38aeff91ad
   secretName: tunnel-credentials
   ingress:
-    - hostname: *.devops.toys
+    - hostname: "*.devops.toys"
       service: https://ingress-nginx-controller.ingress-nginx.svc.cluster.local:443
       originRequest:
         noTLSVerify: true
