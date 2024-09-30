@@ -15,13 +15,23 @@ extraObjects:
       enableOCI: "true"
 configs:
   cm:
+    create: true
     exec.enabled: true
     statusbadge.enabled: true
+    accounts.watcher: login,apiKey
+    accounts.watcher.enabled: "true"
   params:
     applicationsetcontroller.policy: sync
     applicationsetcontroller.enable.progressive.syncs: true
-  repositories:
-    
+  rbac:
+    create: true
+    policy.default: role:readonly
+    policy.csv: |
+      p, role:admin, *, *, *, allow
+      g, admin, role:admin
+
+      p, role:application-watcher, applications, get, */*, allow
+      g, watcher, role:application-watcher
 controller:
   metrics:
     enabled: false
