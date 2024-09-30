@@ -85,7 +85,7 @@ cloudflare:
 		tee ./configs/cloudflare/local/extras/secret-api-key.yaml
 
 external-dns:
-	kubectl create namespace external-dns
+	# kubectl create namespace external-dns
 	kubectl --namespace external-dns \
 		create secret \
 		generic cloudflare-api-key \
