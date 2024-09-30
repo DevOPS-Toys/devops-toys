@@ -9,10 +9,10 @@ controller:
     enabled: false
   metrics:
     enabled: true
-    # service:
-    #   annotations:
-    #     prometheus.io/scrape: "true"
-    #     prometheus.io/port: "10254"
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "10254"
     #   labels:
     #     release: prometheus
     serviceMonitor:
