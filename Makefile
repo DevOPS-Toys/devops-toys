@@ -56,6 +56,34 @@ cert-manager:
 	sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ca.crt
 	kubectl apply -f ./applications/cert-manager.yaml
 
+check-cloudflare-cert:
+	@if [ ! -f ~/.cloudflared/cert.pem ]; then \
+		echo "The cert.pem file does not exist. Running cloudflared tunnel login..."; \
+		cloudflared tunnel login; \
+	else \
+		echo "The cert.pem file already exists."; \
+	fi
+
+cloudflare-tunnel:
+	cloudflared tunnel create devops-toys-demo
+	kubectl create secret generic tunnel-credentials \
+		--from-file=credentials.json=/Users/twostal/.cloudflared/f951b180-f316-400f-a34e-9a38aeff91ad.json \
+		--namespace=cloudflare
+
+cloudflare:
+	#kubectl create namespace cloudflare
+	kubectl --namespace cloudflare \
+		create secret \
+		generic cloudflare-api-key \
+		--from-literal=apiKey=$(CLOUDFLARE_API_KEY) \
+		--from-literal=email=$(CLOUDFLARE_EMAIL) \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		tee ./configs/cloudflare/local/extras/secret-api-key.yaml
+
 configure-argocd:
 	kubectl apply -f ./applications/argo-cd.yaml
 	sleep 60

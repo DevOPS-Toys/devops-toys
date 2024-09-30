@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cloudflare-tunnel
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: local
+        url: https://kubernetes.default.svc
+        dependencies: local-grafana-alloy
+  template:
+    metadata:
+      name: '{{cluster}}-cloudflare-tunnel'
+    spec:
+      project: core
+      destination:
+        namespace: cloudflare
+        server: '{{url}}'
+      sources:
+        - repoURL: https://cloudflare.github.io/helm-charts
+          chart: cloudflare-tunnel
+          targetRevision: 0.*.*
+          helm:
+            releaseName: cloudflare-tunnel
+            valueFiles:
+              - $values/configs/cloudflare-tunnel/{{cluster}}/values.yaml
+        - repoURL: https://github.com/tomasz-wostal-eu/devops-toys.git
+          targetRevision: dev
+          ref: values
+        - repoURL: https://github.com/tomasz-wostal-eu/devops-toys.git
+          path: configs/cloudflare-tunnel/{{cluster}}/extras
+          targetRevision: dev
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=false
+          - FailOnSharedResource=true
+          - RespectIgnoreDifferences=true
