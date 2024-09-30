@@ -89,8 +89,7 @@ external-dns:
 	kubectl --namespace external-dns \
 		create secret \
 		generic cloudflare-api-key \
-		--from-literal=apiKey=$(CLOUDFLARE_API_KEY) \
-		--from-literal=email=$(CLOUDFLARE_EMAIL) \
+		--from-literal=cloudflare_api_key=$(CLOUDFLARE_API_KEY) \
 		--output json \
 		--dry-run=client | \
 		kubeseal --format yaml \
