@@ -1,0 +1,74 @@
+nameOverride: argocd
+fullnameOverride: argocd
+extraObjects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      labels:
+        argocd.argoproj.io/secret-type: repository
+      name: docker-io-helm-oci
+      namespace: argocd
+    stringData:
+      url: registry-1.docker.io/bitnamicharts
+      name: bitnamicharts
+      type: helm
+      enableOCI: "true"
+configs:
+  cm:
+    exec.enabled: true
+    statusbadge.enabled: true
+  params:
+    applicationsetcontroller.policy: sync
+    applicationsetcontroller.enable.progressive.syncs: true
+controller:
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      # labels:
+      #   release: prometheus
+      # selector:
+      #   release: prometheus
+dex:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    labels:
+      release: prometheus
+    selector:
+      release: prometheus
+server:
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      labels:
+        release: prometheus
+      selector:
+        release: prometheus
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: devops-local
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingressClassName: nginx
+    hostname: cd.devops.local
+    path: /
+    tls: true
+  ingressGrpc:
+    enabled: true
+    ingressClassName: nginx
+
+applicationSet:
+  enabled: true
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      labels:
+        release: prometheus
+      selector:
+        release: prometheus
+notifications:
+  enabled: false

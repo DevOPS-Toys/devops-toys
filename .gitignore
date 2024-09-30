@@ -12,3 +12,6 @@ kubeconfig
 kuttl-minimal.yaml
 ca.crt
 ca.key
+README-old.md
+Brewfile
+Makefile-old
