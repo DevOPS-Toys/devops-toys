@@ -8,4 +8,4 @@ sources:
   - ingress
 provider: cloudflare
 cloudflare:
-  secret: cloudflare-api-key
+  secretName: cloudflare-api-key
