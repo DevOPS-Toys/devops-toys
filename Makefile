@@ -126,7 +126,7 @@ google:
 	kubectl --namespace argocd \
 		create secret \
 		generic argocd-google-domain-wide-sa-json \
-		--from-file=googleAuth.json=encoded2.json \
+		--from-file=googleAuth.json=devopslaboratory-f90072620e7c.json \
 		--output json \
 		--dry-run=client | \
 		kubeseal --format yaml \
