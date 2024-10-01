@@ -4,7 +4,6 @@ sources:
   - ingress
 provider: cloudflare
 env:
-  env:
   - name: CF_API_KEY
     valueFrom:
       secretKeyRef:
