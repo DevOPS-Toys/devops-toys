@@ -82,7 +82,7 @@ cloudflare:
 		kubeseal --format yaml \
 		--controller-name=sealed-secrets \
 		--controller-namespace=sealed-secrets | \
-		tee ./configs/cloudflare/local/extras/secret-api-key.yaml
+		tee ./configs/cloudflare-tunnel/local/extras/secret-api-key.yaml
 
 external-dns:
 	# kubectl create namespace external-dns

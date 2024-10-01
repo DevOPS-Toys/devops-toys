@@ -1,8 +1,8 @@
 nameOverride: cloudflare-tunnel
 fullnameOverride: cloudflare-tunnel
 cloudflare:
-  tunnelName: devops-toys-demo
-  tunnelId: f951b180-f316-400f-a34e-9a38aeff91ad
+  tunnelName: devopslabolatory
+  tunnelId: 448c33fd-ba88-462e-a9a4-19891a1a8623
   secretName: tunnel-credentials
   ingress:
     - hostname: "*.devops.toys"
