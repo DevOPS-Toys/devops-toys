@@ -112,25 +112,28 @@ google:
 	kubectl --namespace argocd \
 		create secret \
 		generic argocd-google-oauth-client \
-		--from-literal=apiKey=$(GOOGLE_CLIENT_ID) \
-		--from-literal=email=$(GOOGLE_CLIENT_SECRET) \
+		--from-literal=client_id=$(GOOGLE_CLIENT_ID) \
+		--from-literal=client_secret=$(GOOGLE_CLIENT_SECRET) \
 		--output json \
 		--dry-run=client | \
 		kubeseal --format yaml \
 		--controller-name=sealed-secrets \
 		--controller-namespace=sealed-secrets | \
-		tee ./configs/argo-cd/local/extras/argocd-google-oauth-client.yaml
+		kubectl patch -f - \
+		-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
+		--type=merge \
+		--local -oyaml > ./configs/argo-cd/local/extras/argocd-google-oauth-client.yaml
 	kubectl --namespace argocd \
 		create secret \
 		generic argocd-google-domain-wide-sa-json \
-		--from-file=googleAuth.json=client_secret_699740198104-46guukldme7f9ufd96dvo1b68mg92hur.apps.googleusercontent.com.json \
+		--from-file=googleAuth.json=encoded.json \
 		--output json \
 		--dry-run=client | \
 		kubeseal --format yaml \
 		--controller-name=sealed-secrets \
 		--controller-namespace=sealed-secrets -oyaml - | \
 		kubectl patch -f - \
-		-p '{"spec": {"template": {"metadata": {"labels": {"pp.kubernetes.io/part-of":"argocd"}}}}}' \
+		-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
 		--dry-run=client \
 		--type=merge \
 		--local -oyaml > ./configs/argo-cd/local/extras/argocd-google-domain-wide-sa-json.yaml
