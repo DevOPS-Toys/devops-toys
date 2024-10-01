@@ -20,9 +20,9 @@ spec:
         namespace: external-dns
         server: '{{url}}'
       sources:
-        - repoURL: 'registry-1.docker.io/bitnamicharts'
-          path: 'external-dns'
-          targetRevision: 8.*.*
+        - repoURL: https://kubernetes-sigs.github.io/external-dns/
+          path: kubernetes-sigs
+          targetRevision: 1.*.*
           chart: external-dns
           helm:
             releaseName: external-dns

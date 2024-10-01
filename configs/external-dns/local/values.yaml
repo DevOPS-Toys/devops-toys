@@ -1,11 +1,11 @@
 nameOverride: external-dns
 fullnameOverride: external-dns
-resources:
-  requests:
-    cpu: 10m
-    memory: 180Mi
 sources:
   - ingress
 provider: cloudflare
-cloudflare:
-  secretName: cloudflare-api-key
+env:
+  - name: CF_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-api-key
+        key: apiKey
