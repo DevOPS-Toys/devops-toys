@@ -2,7 +2,7 @@ nameOverride: cloudflare-tunnel
 fullnameOverride: cloudflare-tunnel
 cloudflare:
   tunnelName: devopslabolatory
-  tunnelId: 448c33fd-ba88-462e-a9a4-19891a1a8623
+  tunnelId: 448c33fd-ba88-462e-a9a4-19891a1a8623..cfargotunnel.com.
   secretName: tunnel-credentials
   ingress:
     - hostname: "*.devopslaboratory.org"
