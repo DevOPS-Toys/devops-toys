@@ -61,13 +61,16 @@ server:
   ingress:
     enabled: true
     annotations:
-      cert-manager.io/cluster-issuer: devops-local
+      #cert-manager.io/cluster-issuer: devops-local
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+      external-dns.alpha.kubernetes.io/hostname: cd.devopslaboratory.org
+      external-dns.alpha.kubernetes.io/target: 448c33fd-ba88-462e-a9a4-19891a1a8623
     ingressClassName: nginx
-    hostname: cd.devops.local
+    hostname: cd.devopslaboratory.org
     path: /
-    tls: true
+    tls: false
   ingressGrpc:
     enabled: true
     ingressClassName: nginx
