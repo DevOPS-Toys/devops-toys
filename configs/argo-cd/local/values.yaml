@@ -15,6 +15,7 @@ extraObjects:
       enableOCI: "true"
 configs:
   cm:
+    url: https://cd.devopslaboratory.org
     create: true
     exec.enabled: true
     statusbadge.enabled: true
