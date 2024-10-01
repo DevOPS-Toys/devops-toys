@@ -108,6 +108,34 @@ configure-argocd:
 	argocd account update-password --current-password $$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) --new-password $(ARGOCD_PASSWORD)
 	kill $$(cat /tmp/port-forward.pid) && rm -f /tmp/port-forward.pid
 
+google:
+	kubectl --namespace argocd \
+		create secret \
+		generic argocd-google-oauth-client \
+		--from-literal=apiKey=$(GOOGLE_CLIENT_ID) \
+		--from-literal=email=$(GOOGLE_CLIENT_SECRET) \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		tee ./configs/argo-cd/local/extras/argocd-google-oauth-client.yaml
+	kubectl --namespace argocd \
+		create secret \
+		generic argocd-google-domain-wide-sa-json \
+		--from-file=googleAuth.json=encoded.json \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets -oyaml - | \
+		kubectl patch -f - \
+		-p '{"spec": {"template": {"metadata": {"labels": {"pp.kubernetes.io/part-of":"argocd"}}}}}' \
+		--dry-run=client \
+		--type=merge \
+		--local -oyaml > ./configs/argo-cd/local/extras/argocd-google-domain-wide-sa-json.yaml
+
+
 all: cluster initial-argocd-setup grafana-alloy sealed-secrets ingress-nginx cert-manager configure-argocd
 
 # Teardown 
