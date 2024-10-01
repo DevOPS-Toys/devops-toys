@@ -20,17 +20,17 @@ configs:
     statusbadge.enabled: true
     # accounts.watcher: login,apiKey
     # accounts.watcher.enabled: "true"
-  dex.config: |
-    connectors:
-      - type: google
-        id: google
-        name: Google
-        config:
-          redirectURI: https://cd.devopslaboratory.org/api/dex/callback
-          clientID: $argocd-google-oauth-client:client_id
-          clientSecret: $argocd-google-oauth-client:client_secret
-          serviceAccountFilePath: /tmp/oidc/googleAuth.json
-          adminEmail: tomasz.wostal@itomm.pl
+    dex.config: |
+      connectors:
+        - type: google
+          id: google
+          name: Google
+          config:
+            redirectURI: https://cd.devopslaboratory.org/api/dex/callback
+            clientID: $argocd-google-oauth-client:client_id
+            clientSecret: $argocd-google-oauth-client:client_secret
+            serviceAccountFilePath: /tmp/oidc/googleAuth.json
+            adminEmail: tomasz.wostal@itomm.pl
   params:
     applicationsetcontroller.policy: sync
     applicationsetcontroller.enable.progressive.syncs: true
