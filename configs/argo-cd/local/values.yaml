@@ -18,20 +18,39 @@ configs:
     create: true
     exec.enabled: true
     statusbadge.enabled: true
-    accounts.watcher: login,apiKey
-    accounts.watcher.enabled: "true"
+    # accounts.watcher: login,apiKey
+    # accounts.watcher.enabled: "true"
+  dex.config: |
+    connectors:
+      - type: google
+        id: google
+        name: Google
+        config:
+          redirectURI: https://cd.devopslaboratory.org/api/dex/callback
+          clientID: $argocd-google-oauth-client:client_id
+          clientSecret: $argocd-google-oauth-client:client_secret
+          serviceAccountFilePath: /tmp/oidc/googleAuth.json
+          adminEmail: tomasz.wostal@itomm.pl
   params:
     applicationsetcontroller.policy: sync
     applicationsetcontroller.enable.progressive.syncs: true
   rbac:
     create: true
-    policy.default: role:readonly
+    scopes: "[groups, email]"
     policy.csv: |
-      p, role:admin, *, *, *, allow
-      g, admin, role:admin
+      p, role:basic-viewer, clusters, get, *, allow
+      p, role:basic-viewer, projects, get, *, allow
+      p, role:basic-viewer, repositories, get, *, allow
+      p, role:basic-viewer, logs, get, *, allow
+      g, tester@itomm.pl, role:basic-viewer
+      g, devops@itomm.pl, role:admin
+    # policy.default: role:readonly
+    # policy.csv: |
+    #   p, role:admin, *, *, *, allow
+    #   g, admin, role:admin
 
-      p, role:application-watcher, applications, get, */*, allow
-      g, watcher, role:application-watcher
+    #   p, role:application-watcher, applications, get, */*, allow
+    #   g, watcher, role:application-watcher
 controller:
   metrics:
     enabled: true
@@ -42,7 +61,24 @@ controller:
       # selector:
       #   release: prometheus
 dex:
-  enabled: false
+  enabled: true
+  volumeMounts:
+    - mountPath: /shared
+      name: static-files
+    - mountPath: /tmp
+      name: dexconfig
+    - mountPath: /tmp/oidc
+      name: google-json
+      readOnly: true
+  volumes:
+    - emptyDir: {}
+      name: static-files
+    - emptyDir: {}
+      name: dexconfig
+    - name: google-json
+      secret:
+        defaultMode: 420
+        secretName: argocd-google-domain-wide-sa-json
   serviceMonitor:
     enabled: true
     labels:
