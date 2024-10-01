@@ -1,5 +1,5 @@
 domainFilters:
-  - "devopslabolatory.org"
+  - "devopslaboratory.org"
 provider:
   name: cloudflare
 policy: sync

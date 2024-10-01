@@ -5,7 +5,7 @@ cloudflare:
   tunnelId: 448c33fd-ba88-462e-a9a4-19891a1a8623
   secretName: tunnel-credentials
   ingress:
-    - hostname: "*.devopslabolatory.org"
+    - hostname: "*.devopslaboratory.org"
       service: https://ingress-nginx-controller.ingress-nginx.svc.cluster.local:443
       originRequest:
         noTLSVerify: true
