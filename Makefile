@@ -123,7 +123,7 @@ google:
 	kubectl --namespace argocd \
 		create secret \
 		generic argocd-google-domain-wide-sa-json \
-		--from-file=googleAuth.json=encoded.json \
+		--from-file=googleAuth.json=client_secret_699740198104-46guukldme7f9ufd96dvo1b68mg92hur.apps.googleusercontent.com.json \
 		--output json \
 		--dry-run=client | \
 		kubeseal --format yaml \
