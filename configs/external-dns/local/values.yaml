@@ -1,16 +1,11 @@
-nameOverride: external-dns
-fullnameOverride: external-dns
-sources:
-  - ingress
-provider: cloudflare
+domainFilters:
+  - "devopslabolatory.org"
+provider:
+  name: cloudflare
+policy: sync
 env:
-  - name: CF_API_KEY
+  - name: CF_API_TOKEN
     valueFrom:
       secretKeyRef:
-        name: cloudflare-api-key
-        key: cloudflare_api_key
-  - name: CF_API_EMAIL
-    valueFrom:
-      secretKeyRef:
-        name: cloudflare-api-key
-        key: email
+        name: external-dns-cloudflare
+        key: apiToken
