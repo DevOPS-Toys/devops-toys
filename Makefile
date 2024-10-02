@@ -190,7 +190,7 @@ argo-events:
 	kubectl --namespace argo-events \
 		create secret \
 		generic webhook-token-fpi \
-		--from-literal=secret=${FPI_GITHUB_TOKEN} \
+		--from-literal=token=${FPI_GITHUB_TOKEN} \
 		--output json \
 		--dry-run=client | \
 		kubeseal --format yaml \
