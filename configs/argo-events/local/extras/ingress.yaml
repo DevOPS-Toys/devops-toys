@@ -12,13 +12,6 @@ spec:
   - host: events.devops.toys
     http:
       paths:
-      - path: /dt
-        pathType: Prefix
-        backend:
-          service:
-            name: devopstoys-eventsource-svc
-            port:
-              number: 12000
       - path: /fpi
         pathType: Prefix
         backend:

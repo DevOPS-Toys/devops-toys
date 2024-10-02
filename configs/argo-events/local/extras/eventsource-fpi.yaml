@@ -17,7 +17,7 @@ spec:
         endpoint: /fpi
         port: "12000"
         method: POST
-        url: https://events.devops.toys
+        url: https://events.devopslaboratory.org
       events:
         - "*"
       apiToken:
