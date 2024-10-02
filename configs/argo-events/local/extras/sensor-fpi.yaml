@@ -4,8 +4,8 @@ metadata:
   name: github-pr-opened-sensor
   namespace: argo-events
 spec:
-  # template:
-  #   serviceAccountName: operate-workflow-sa
+  template:
+    serviceAccountName: operate-workflow-sa
   dependencies:
     - name: github-pull-request
       eventSourceName: fpi
@@ -34,6 +34,7 @@ spec:
                 generateName: github-pr-workflow-
                 namespace: argo
               spec:
+                serviceAccountName: workflow
                 podGC:
                   strategy: OnWorkflowCompletion
                   deleteDelayDuration: 30s
