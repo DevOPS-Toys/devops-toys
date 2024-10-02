@@ -137,6 +137,67 @@ google:
 		--dry-run=client \
 		--type=merge \
 		--local -oyaml > ./configs/argo-cd/local/extras/argocd-google-domain-wide-sa-json.yaml
+	kubectl --namespace argocd \
+		create secret \
+		generic argo-workflows-sso \
+		--from-literal=client-id=$(ARGO_WORKFLOWS_CLIENT_ID) \
+		--from-literal=client-secret=$(ARGO_WORKFLOWS_CLIENT_SECRET) \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		kubectl patch -f - \
+		-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
+		--type=merge \
+		--local -oyaml > ./configs/argo-cd/local/extras/argo-workflows-sso.yaml
+
+argo-workflows:
+	#kubectl create namespace argo
+	kubectl --namespace argo \
+		create secret \
+		generic argo-workflows-sso \
+		--from-literal=client-id=$(ARGO_WORKFLOWS_CLIENT_ID) \
+		--from-literal=client-secret=$(ARGO_WORKFLOWS_CLIENT_SECRET) \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		kubectl patch -f - \
+		-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
+		--type=merge \
+		--local -oyaml > ./configs/argo-workflows/local/extras/argo-workflows-sso.yaml
+
+argo-events:
+	@if kubectl get namespace $(NAMESPACE) >/dev/null 2>&1; then \
+		echo "Namespace $(NAMESPACE) already exists."; \
+	else \
+		echo "Namespace $(NAMESPACE) does not exist. Creating..."; \
+		kubectl create namespace $(NAMESPACE); \
+		echo "Namespace $(NAMESPACE) has been created."; \
+	fi
+	kubectl --namespace argo-events \
+		create secret \
+		generic webhook-secret-fpi \
+		--from-literal=secret=${FPI_WEBHOOK_SECRET} \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		tee ./configs/argo-events/local/extras/webhook-secret-fpi.yaml
+	kubectl --namespace argo-events \
+		create secret \
+		generic webhook-token-fpi \
+		--from-literal=secret=${FPI_GITHUB_TOKEN} \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		tee ./configs/argo-events/local/extras/webhook-token-fpi.yaml
+
 
 
 all: cluster initial-argocd-setup grafana-alloy sealed-secrets ingress-nginx cert-manager configure-argocd

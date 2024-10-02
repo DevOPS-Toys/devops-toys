@@ -3,14 +3,22 @@ kind: Ingress
 metadata:
   name: events-ingress
   annotations:
-    # cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: nginx
-    # external-dns.alpha.kubernetes.io/hostname: events.devops.toys
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    external-dns.alpha.kubernetes.io/hostname: events.devopslaboratory.org
+    external-dns.alpha.kubernetes.io/target: "448c33fd-ba88-462e-a9a4-19891a1a8623.cfargotunnel.com."
 spec:
   rules:
   - host: events.devops.toys
     http:
       paths:
+      - path: /dt
+        pathType: Prefix
+        backend:
+          service:
+            name: devopstoys-eventsource-svc
+            port:
+              number: 12000
       - path: /fpi
         pathType: Prefix
         backend:
@@ -18,7 +26,3 @@ spec:
             name: fpi-eventsource-svc
             port:
               number: 12000
-  # tls:
-  # - hosts:
-  #   - events.devops.toys
-  #   secretName: events-devops-toys-ingress-tls

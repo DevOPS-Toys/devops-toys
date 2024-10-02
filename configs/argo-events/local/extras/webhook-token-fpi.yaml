@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: webhook-token-fpi
+  namespace: argo-events
+spec:
+  encryptedData:
+    secret: AgBTN/Mi1kQNuVMcVvtsVs3WbvXl61H8p4cbcYdES/I806vNrZkZav5qcNDzaXpxnXuAm3wVzz+6Pltwxhy9SfBS3HVZX2ff7kowMjgBYK3v3T6di3XVVqivm9I5xKYKGJOa3VfAZFL6IEcUb29bLDPNS0GAGaqMmimkZMkGu5TFWQznqd5XWIc+SS3fTbXGOpERV2j5s00ghZ64GMpAZkv8dUnMXj8GJPHQrqKiIbGeMlq2QITLSNxEdV6g0ivZWd0LPI4iLJjH70uRdhUjHKyDXw6PN0OqIebmw/ZpA5sPZAQUVWj3vx/i/IJ9EG69prfNds9rgG1JyRjk1IhK6VocowxsTHgFNJ3khachaH0vMhi+suIle0ELbGiszFUcVfp1060rv+G80PfpGLFrARlk8Vs+ymKNnQWylmFTN/X2CXc7BE65QyNnGByY8k0GFBjtnXuw9MpAWRmEooXQDV3962Cu3ykxOypcrGjuP1TWk57tympyCl5LLemoZscuI0w4pHm0u9NENVIasW/zAxVoLYIpPHA3f29tVHmbX/oVRhe/mckVHXaksrDtJmVY2dZFY0Pi4QTpUPYrf24BdVxqVac+NAFiF/Azj/ZiCD1Px74A9s2DSanFs9YXOWKGxh7JAiKMEGqucTunEnnKU6M+QVlCKAQR6mzuSnC7tndJc48jjBs9J6p6wZhHdL7tlZH18Gnzu7EOxCii3tBJnrqmGg5ESBucbeDg4wtO1FUdqWf567ASYFte
+  template:
+    metadata:
+      creationTimestamp: null
+      name: webhook-token-fpi
+      namespace: argo-events
