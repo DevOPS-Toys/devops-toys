@@ -52,6 +52,7 @@ configs:
       p, role:basic-viewer, logs, get, *, allow
       g, tester@itomm.pl, role:basic-viewer
       g, devops@itomm.pl, role:admin
+      g, admin@itomm.pl, role:admin
     # policy.default: role:readonly
     # policy.csv: |
     #   p, role:admin, *, *, *, allow
