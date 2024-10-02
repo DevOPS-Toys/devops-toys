@@ -25,6 +25,7 @@ server:
     annotations: 
       external-dns.alpha.kubernetes.io/hostname: ci.devopslaboratory.org
       external-dns.alpha.kubernetes.io/target: "448c33fd-ba88-462e-a9a4-19891a1a8623.cfargotunnel.com."
+      external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
     path: /
     hosts:
       - ci.devopslaboratory.org
