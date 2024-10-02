@@ -77,7 +77,7 @@ cloudflare:
 	@echo "Creating secrets ..."
 	@kubectl --namespace cloudflare \
 		create secret \
-		generic devopslabolatory \
+		generic tunnel-credentials \
 		--from-file=credentials.json=$(HOME)/.cloudflared/$(CLOUDFLARE_TUNNEL_ID).json \
 		--output json \
 		--dry-run=client | \
