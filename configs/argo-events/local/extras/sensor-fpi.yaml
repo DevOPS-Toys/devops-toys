@@ -54,9 +54,9 @@ spec:
                     - name: short_sha
                       value: ""
                     - name: branch
-                      value: "{{branch}}"
+                      value: ""
                     - name: target_branch
-                      value: "{{target_branch}}"
+                      value: ""
                 templates:
                   - name: main
                     inputs:
