@@ -14,8 +14,8 @@ server:
     sessionExpiry: 240h
     clientId:
       name: argo-workflows-sso
-      key: client-id
+      key: client_id
     clientSecret:
       name: argo-workflows-sso
-      key: client-secret
+      key: client_secret
     redirectUrl: https://ci.devopslaboratory.org/oauth2/callback
