@@ -1,0 +1,17 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: argo-workflows-sso
+  namespace: argocd
+spec:
+  encryptedData:
+    client_id: AgCvVHGyPwJBv1C+N6TCzmXeYsczmY/TbPPcroVY+hF4AI8I+QlITc0sCC0dOLWnm7EaDspjLWxolFvm2M+AY3u2Wb8su0NZ0slmR7xn+Y3RTrcCqaq5C5NdR0k8ocjIGhGofSGcwyzl1dkTQk2klwUH7+yTJh0s5IOLTBfXFTN/zr0aSYo3kQYqqFZqb9H8ymI8j/+YO9DbnK8IgPUo8IU378o/XLvSgOG8F+Aq+pY7vVdl1z1nsiDdV7a/A9YOpuI8wX75a+n6zL77a/YBWESUwDG3HSL1YgVIPUCrPhOIFS0VvlYPZ4AN/mvWpDsDyBpVuBLD3rBGJuJ7N76rrElLJUm86QSI8ErNYyFS3IrYbm9dHHcssKB3j0uBoGaoUhh3hFJhNu/vgUWQvSoK7iZzVb18s8uatqKQguChwx4FjBWXZY7s8Tt4/6U5LOHExBz5FYIseMhY0nHRcO3yqrPtvavSbyARN5NlxIBIg9tETh7KqpZxbEhUSfgEqOgqj/2eeNZn8/XHA1kHXXnfKasmilVq5ap16lTqDgxZx1ARKxaFUcFBU+rCXOJQO2yz0wxbrA//5De/pzOu2fcR+kcIopTFTwdlfCRLl/pOIWS+RBDsafdPjvbvjGEL0UoWe4kKf22LQ+kwkxJvAEv84WLx7E/p2TQSuebWflhQXSnVYwPPhkoM2oxajOdckzlQLZdZGwY7MdeKJc++F3z7whpEjSlibusgcYU=
+    client_secret: AgAkNeJqhQCIBc5HwsUOAZ5yN4iUKSJZRrU+fg3yNl0L7FHcPh2JK2D9c6cWHvY72xtux3eQBi860+9y8OIaZ16lH2rQ0mjHaKLr+SU67mzkGYMVaS6jTDGNhw+1UYmAPV7UmMxv95snQhAtJOeUl5OZKsOPwDONhw61OTmUFmE+DUzb1s7U7llfZYgRZDnohZEX9pWsoFuZar67cbI0EcD4Hl/xgK4I+LXRHMuMAXUDK3quk1QSEUgAmS/JatilNm+LE9afkDX+hiAn0tMVy/46mrl5nkoCZQf8Gl+55Z6XA53p4+KceshWQ83v5AksS4xJ89+xxPBZlM206USMS/a0E7n5xuMrEp5MNU0MTY3LFe9/2XBBaxCgnDx0rnKfBNs8AvxaO+wT7Dsr0Uh0DmHQ6UQdXQU4ZMqBBmBlfQSqNaIasWLQMBzPjgytjR9v6vBvC1On9rplBZG4peAsY1QOUIARlbxPUHDdxE2XykdURD+UH3Ggvm6IdL8TBVHLxs3tBAyxeubQxE4zUXjlM7HCqw6ghAECVGw/Qh11v07HWkKWr9jqL5CfTPwkoDeSPq5FKT0exDE2AEzFxkWoGti+Gd+1sfJNwhKDoARfXHYSuP1/btzadL09bLUV+amKSvlHwn+di0KYJF5rLvzM5bqSnQL0XYLG3WQmBs2Qx7HosXOM+RhISgDNCY4keg3GDqRaErTwWHY4k3zVf2OWzwAXvjTvFyuXcxKUfvQFegNtyvb0eXg0AA==
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/part-of: argocd
+      name: argo-workflows-sso
+      namespace: argocd
