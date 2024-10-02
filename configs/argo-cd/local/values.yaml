@@ -74,7 +74,7 @@ dex:
       valueFrom:
         secretKeyRef:
           name: argo-workflows-sso
-          key: client_secret
+          key: client-secret
   volumeMounts:
     - mountPath: /shared
       name: static-files
