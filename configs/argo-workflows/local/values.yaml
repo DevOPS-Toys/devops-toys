@@ -21,6 +21,7 @@ server:
     redirectUrl: https://ci.devopslaboratory.org/oauth2/callback
     scopes:
       - groups
+      - email
     rbac:
       enabled: true
   ingress:
