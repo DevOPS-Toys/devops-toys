@@ -1,0 +1,21 @@
+nameOverride: argo-workflows
+fullnameOverride: argo-workflows
+
+workflowNamespaces:
+    - default
+    - workflows
+
+server:
+  authModes:
+    - sso
+  sso:
+    enabled: true
+    issuer: https://cd.devopslaboratory.org/api/dex
+    sessionExpiry: 240h
+    clientId:
+      name: argo-workflows-sso
+      key: client-id
+    clientSecret:
+      name: argo-workflows-sso
+      key: client-secret
+    redirectUrl: https://ci.devopslaboratory.org/oauth2/callback

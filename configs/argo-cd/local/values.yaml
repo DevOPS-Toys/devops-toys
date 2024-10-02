@@ -32,6 +32,12 @@ configs:
             clientSecret: $argocd-google-oauth-client:client_secret
             serviceAccountFilePath: /tmp/oidc/googleAuth.json
             adminEmail: tomasz.wostal@itomm.pl
+      staticClients:
+        - id: argo-workflows-sso
+          name: Argo Workflow
+          redirectURIs:
+            - https://ci.devopslaboratory.org/oauth2/callback
+          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
   params:
     applicationsetcontroller.policy: sync
     applicationsetcontroller.enable.progressive.syncs: true
@@ -63,6 +69,12 @@ controller:
       #   release: prometheus
 dex:
   enabled: true
+  env:
+    - name: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: argo-workflows-sso
+          key: client-secret
   volumeMounts:
     - mountPath: /shared
       name: static-files
