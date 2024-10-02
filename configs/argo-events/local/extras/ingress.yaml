@@ -9,7 +9,7 @@ metadata:
     external-dns.alpha.kubernetes.io/target: "448c33fd-ba88-462e-a9a4-19891a1a8623.cfargotunnel.com."
 spec:
   rules:
-  - host: events.devops.toys
+  - host: events.devopslaboratory.org
     http:
       paths:
       - path: /fpi
