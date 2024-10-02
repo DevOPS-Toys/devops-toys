@@ -19,6 +19,10 @@ server:
       name: argo-workflows-sso
       key: client-secret
     redirectUrl: https://ci.devopslaboratory.org/oauth2/callback
+    scopes:
+      - groups
+    rbac:
+      enabled: true
   ingress:
     enabled: true
     ingressClassName: nginx
