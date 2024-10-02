@@ -45,6 +45,7 @@ configs:
     create: true
     scopes: "[groups, email]"
     policy.csv: |
+      p, role:admin, *, *, *, allow
       p, role:basic-viewer, clusters, get, *, allow
       p, role:basic-viewer, projects, get, *, allow
       p, role:basic-viewer, repositories, get, *, allow
