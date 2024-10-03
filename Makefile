@@ -183,7 +183,7 @@ argo-events:
 	# GH token for fpi
 	kubectl --namespace argo-events \
 	create secret generic gh-token-fpi \
-	--from-literal=secret=$(FPI_GITHUB_TOKEN) \
+	--from-literal=token=$(FPI_GITHUB_TOKEN) \
 	--output json \
 	--dry-run=client | \
 	kubeseal --format yaml \
@@ -203,7 +203,7 @@ argo-events:
 	# GH token for dt
 	kubectl --namespace argo-events \
 	create secret generic gh-token-dt \
-	--from-literal=secret=$(DT_GITHUB_TOKEN) \
+	--from-literal=token=$(DT_GITHUB_TOKEN) \
 	--output json \
 	--dry-run=client | \
 	kubeseal --format yaml \
