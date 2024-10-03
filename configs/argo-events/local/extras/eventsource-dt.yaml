@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
-  name: fpi
+  name: dt
 spec:
   service:
     ports:
@@ -12,20 +12,20 @@ spec:
       repositories:
         - owner: tomasz-wostal-eu
           names:
-            - fpi
+            - dt
       webhook:
-        endpoint: /fpi
+        endpoint: /dt
         port: "12000"
         method: POST
         url: https://events.devopslaboratory.org
       events:
         - "*"
       apiToken:
-        name: gh-token-fpi
+        name: gh-token-dt
         key: token
       insecure: false
       active: true
       contentType: json
       webhookSecret:
-        name: webhook-secret-fpi
+        name: webhook-secret-dt
         key: secret
