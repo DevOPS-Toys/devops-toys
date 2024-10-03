@@ -10,9 +10,9 @@ spec:
   github:
     pull_request:
       repositories:
-        - owner: tomasz-wostal-eu
+        - owner: devops-toys
           names:
-            - dt
+            - devops-toys
       webhook:
         endpoint: /dt
         port: "12000"
