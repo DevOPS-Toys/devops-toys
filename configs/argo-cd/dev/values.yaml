@@ -131,6 +131,8 @@ applicationSet:
         release: prometheus
 notifications:
   enabled: true
+  secret:
+    create: false
   notifiers:
     service.github: |
       appID: "1015830"
