@@ -148,11 +148,26 @@ notifications:
           - app-deployed
         when: app.status.operationState.phase in ['Succeeded'] and
           app.status.health.status == 'Healthy'
-    template.app-deployed: >
+    template.app-deployed: |
       message: |
         Application {{.app.metadata.name}} is now running new version of deployments manifests.
       github:
+        repoURLPath: "{{.app.spec.source.repoURL}}"
+        revisionPath: "{{.app.status.operationState.syncResult.revision}}"
         status:
           state: success
-          label: "argo-cd/{{.app.metadata.name}}"
+          label: "continuous-delivery/{{.app.metadata.name}}"
           targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+        deployment:
+          state: success
+          environment: production
+          environmentURL: "https://{{.app.metadata.name}}.example.com"
+          logURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+          requiredContexts: []
+          autoMerge: true
+          transientEnvironment: false
+          reference: v1.0.0
+        pullRequestComment:
+          content: |
+            Application {{.app.metadata.name}} is now running new version of deployments manifests.
+            See more here: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true
