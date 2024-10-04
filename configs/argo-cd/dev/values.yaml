@@ -166,7 +166,7 @@ notifications:
           requiredContexts: []
           autoMerge: true
           transientEnvironment: false
-          reference: v1.0.0
+          reference: v0.1
         pullRequestComment:
           content: |
             Application {{.app.metadata.name}} is now running new version of deployments manifests.
