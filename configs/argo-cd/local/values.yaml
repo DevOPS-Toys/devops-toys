@@ -144,7 +144,7 @@ notifications:
     service.github: |
     appID: "1015830"
     installationID: "55589468"
-    privateKey: $devops-toys-github-app
+    privateKey: $argocd-notifications-secret
   templates:
     template.github-app-deployed: |
       message: |
