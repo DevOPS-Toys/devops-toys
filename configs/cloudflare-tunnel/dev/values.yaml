@@ -1,0 +1,21 @@
+nameOverride: cloudflare-tunnel
+fullnameOverride: cloudflare-tunnel
+cloudflare:
+  tunnelName: devopslabolatory
+  tunnelId: 448c33fd-ba88-462e-a9a4-19891a1a8623..cfargotunnel.com.
+  secretName: tunnel-credentials
+  ingress:
+    - hostname: "*.devopslaboratory.org"
+      service: https://ingress-nginx-controller.ingress-nginx.svc.cluster.local:443
+      originRequest:
+        noTLSVerify: true
+
+resources:
+  limits:
+    cpu: "100m"
+    memory: "128Mi"
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+
+replicaCount: 1

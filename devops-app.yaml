@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devops-app
+  namespace: argocd
+  annotations:
+    notifications.argoproj.io/subscribe.on-deployed.github: ""
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/tomasz-wostal-eu/devops-toys.git
+    targetRevision: dev
+    path: applicationsets
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true  
+    automated: 
+      prune: true 
+      selfHeal: true

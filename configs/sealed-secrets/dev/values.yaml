@@ -1,0 +1,19 @@
+nameOverride: sealed-secrets
+fullnameOverride: sealed-secrets
+
+metrics:
+  serviceMonitor:
+    enabled: true
+    namespace: ""
+    labels: {}
+    annotations: {}
+    interval: ""
+    scrapeTimeout: ""
+    honorLabels: true
+    metricRelabelings: []
+    relabelings: []
+  dashboards:
+    create: false
+    labels: {}
+    annotations: {}
+    namespace: ""

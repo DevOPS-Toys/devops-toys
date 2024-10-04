@@ -12,3 +12,13 @@ kubeconfig
 kuttl-minimal.yaml
 ca.crt
 ca.key
+README-old.md
+Brewfile
+Makefile-old
+ingress-test.yaml
+client_secret_699740198104-46guukldme7f9ufd96dvo1b68mg92hur.apps.googleusercontent.com.json
+encoded.json
+encoded2.json
+devopslaboratory-90293f4248d7.json
+devopslaboratory-f90072620e7c.json
+devops-toys.2024-10-04.private-key.pem

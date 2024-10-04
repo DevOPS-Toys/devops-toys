@@ -1,0 +1,152 @@
+nameOverride: argocd
+fullnameOverride: argocd
+extraObjects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      labels:
+        argocd.argoproj.io/secret-type: repository
+      name: docker-io-helm-oci
+      namespace: argocd
+    stringData:
+      url: registry-1.docker.io/bitnamicharts
+      name: bitnamicharts
+      type: helm
+      enableOCI: "true"
+configs:
+  cm:
+    url: https://cd.devopslaboratory.org
+    create: true
+    exec.enabled: true
+    statusbadge.enabled: true
+    # accounts.watcher: login,apiKey
+    # accounts.watcher.enabled: "true"
+    dex.config: |
+      connectors:
+        - type: google
+          id: google
+          name: Google
+          config:
+            redirectURI: https://cd-dev.devopslaboratory.org/api/dex/callback
+            clientID: $argocd-google-oauth-client:client_id
+            clientSecret: $argocd-google-oauth-client:client_secret
+            serviceAccountFilePath: /tmp/oidc/googleAuth.json
+            adminEmail: tomasz.wostal@itomm.pl
+      staticClients:
+        - id: argo-workflows-sso
+          name: Argo Workflow
+          redirectURIs:
+            - https://ci-dev.devopslaboratory.org/oauth2/callback
+          secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+  params:
+    applicationsetcontroller.policy: sync
+    applicationsetcontroller.enable.progressive.syncs: true
+  rbac:
+    create: true
+    scopes: "[groups, email]"
+    policy.csv: |
+      p, role:admin, *, *, *, allow
+      p, role:basic-viewer, clusters, get, *, allow
+      p, role:basic-viewer, projects, get, *, allow
+      p, role:basic-viewer, repositories, get, *, allow
+      p, role:basic-viewer, logs, get, *, allow
+      g, tester@itomm.pl, role:basic-viewer
+      g, devops@itomm.pl, role:admin
+      g, admin@itomm.pl, role:admin
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false
+      # labels:
+      #   release: prometheus
+      # selector:
+      #   release: prometheus
+dex:
+  enabled: true
+  env:
+    - name: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: argo-workflows-sso
+          key: client-secret
+  volumeMounts:
+    - mountPath: /shared
+      name: static-files
+    - mountPath: /tmp
+      name: dexconfig
+    - mountPath: /tmp/oidc
+      name: google-json
+      readOnly: true
+  volumes:
+    - emptyDir: {}
+      name: static-files
+    - emptyDir: {}
+      name: dexconfig
+    - name: google-json
+      secret:
+        defaultMode: 420
+        secretName: argocd-google-domain-wide-sa-json
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: prometheus
+    selector:
+      release: prometheus
+server:
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      labels:
+        release: prometheus
+      selector:
+        release: prometheus
+  ingress:
+    enabled: true
+    annotations:
+      #cert-manager.io/cluster-issuer: devops-local
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+      external-dns.alpha.kubernetes.io/hostname: cd-dev.devopslaboratory.org
+      external-dns.alpha.kubernetes.io/target: "448c33fd-ba88-462e-a9a4-19891a1a8623.cfargotunnel.com."
+    ingressClassName: nginx
+    hostname: cd-dev.devopslaboratory.org
+    path: /
+    tls: false
+  ingressGrpc:
+    enabled: true
+    ingressClassName: nginx
+
+applicationSet:
+  enabled: true
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+      labels:
+        release: prometheus
+      selector:
+        release: prometheus
+notifications:
+  enabled: true
+  notifiers:
+    service.github: |
+      appID: "1015830"
+      installationID: "55589468"
+      privateKey: $github-privateKey
+    trigger.on-deployed: |
+      - description: Application is synced and healthy. Triggered once per commit.
+        send:
+          - app-deployed
+        when: app.status.operationState.phase in ['Succeeded'] and
+          app.status.health.status == 'Healthy'
+    template.app-deployed: |
+      message: |
+        Application {{.app.metadata.name}} is now running new version of deployments manifests.
+      github:
+        status:
+          state: success
+          label: "continuous-delivery/{{.app.metadata.name}}"
+          targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"

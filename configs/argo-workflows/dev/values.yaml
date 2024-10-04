@@ -1,0 +1,33 @@
+nameOverride: argo-workflows
+fullnameOverride: argo-workflows
+
+workflowNamespaces:
+    - default
+    - workflows
+
+server:
+  authModes:
+    - sso
+  sso:
+    enabled: true
+    issuer: https://cd-dev.devopslaboratory.org/api/dex
+    sessionExpiry: 240h
+    clientId:
+      name: argo-workflows-sso
+      key: client-id
+    clientSecret:
+      name: argo-workflows-sso
+      key: client-secret
+    redirectUrl: https://ci-dev.devopslaboratory.org/oauth2/callback
+    rbac:
+      enabled: false
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations: 
+      external-dns.alpha.kubernetes.io/hostname: ci-dev.devopslaboratory.org
+      external-dns.alpha.kubernetes.io/target: "448c33fd-ba88-462e-a9a4-19891a1a8623.cfargotunnel.com."
+      external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    path: /
+    hosts:
+      - ci-dev.devopslaboratory.org

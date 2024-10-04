@@ -3,211 +3,241 @@ ENV	:= $(PWD)/.env
 include $(ENV)
 OS := $(shell uname -s)
 
-# Debian/Ubuntu prerequisites
-install_prerequisites:
-	@echo "Install basic prerequisites"
-	sudo apt-get update
-	sudo apt-get install git neovim build-essential make
-
-# Debian/Ubuntu docker prerequisites
-install_docker:
-	@echo "Install Docker"
-	sudo apt-get update
-	sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $$(lsb_release -cs) stable"
-	sudo apt-get update
-	sudo apt-get install -y docker-ce
-	sudo usermod -aG docker $${USER}
-	@echo "Docker was installed. Please logout and login again"
-
-# The cross plaform package manager
-install_brew:
-	@echo "Install Homebrew"
-	/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
 # Create a local Kubernetes cluster
-cluster_local:
-	@echo "Creating local Kubernetes cluster"
+cluster:
 	kind create cluster --config ./kind/cluster-local.yaml
 
-# Set the proper domain name
-domain_name:
-	find devops-app -type f -name "*.yaml" -exec sed -i 's/devops.toys/$(DOMAIN_NAME)/g' {} \;
-	git add .
-	git commit -m "Change domain name"
-	git push
+initial-argocd-setup:
+	@echo "Installing initial version of Argo CD ..."
+	@helm repo add argo https://argoproj.github.io/argo-helm --force-update
+	@helm upgrade --install \
+		argocd argo/argo-cd \
+		--namespace argocd \
+		--create-namespace \
+		--wait
+	@kubectl apply -n argocd -f ./bootstrap/projects.yaml
 
-# Configure the local Kubernetes cluster
-initial_setup:
-	helm repo add argo https://argoproj.github.io/argo-helm
-	helm upgrade --install argocd argo/argo-cd -n argocd --create-namespace --wait
-	kustomize build ./devops-app/devops-app | kubectl apply -f -
-	kubectl create namespace cert-manager
-	kubectl create namespace minio
-	kubectl create namespace sonarqube
-	kubectl create namespace metallb-system
-	kubectl create namespace monitoring
-	kubectl create namespace ingress-nginx
-	kustomize build ./devops-app/kube-prometheus-stack | kubectl apply -f -
-	kustomize build ./devops-app/ingress-nginx | kubectl apply -f -
-	kustomize build ./devops-app/sealed-secrets | kubectl apply -f -
-	kustomize build ./devops-app/cert-manager | kubectl apply -f -
-	kustomize build ./devops-app/metallb | kubectl apply -f -
-	kustomize build ./devops-app/trust-manager | kubectl apply -f -
-	kustomize build ./devops-app/cnpg | kubectl apply -f -
-	# TODO: Find a better solution - wait for cert-manager
-	sleep 180
+grafana-alloy:
+	@echo "Installing Grafana Alloy ..."
+	@kubectl apply -f ./applicationsets/grafana-alloy.yaml
+	@sleep 60
 
-# Configure the ArgoCD repository
-add_repo:
+sealed-secrets:
+	@echo "Installing Sealed Secrets ..."
+	@kubectl apply -f ./applicationsets/sealed-secrets.yaml
+	@sleep 60
+
+cert-manager:
+	@if kubectl get namespace cert-manager >/dev/null 2>&1; then \
+		echo "Namespace cert-manager already exists."; \
+	else \
+		echo "Namespace cert-manager does not exist. Creating..."; \
+		kubectl create namespace cert-manager; \
+		echo "Namespace cert-manager has been created."; \
+	fi
+	@echo "Creating Certificate Authority (CA)"
+	@openssl genrsa -out ca.key 4096
+	@openssl req -new -x509 -sha256 -days 3650 \
+		-key ca.key \
+		-out ca.crt \
+		-subj '/CN=$(CN)/emailAddress=$(CERT_EMAIL)/C=$(C)/ST=$(ST)/L=$(L)/O=$(O)/OU=$(OU)'
+	@echo "Creating secrets for Cert Manager..."
+	@kubectl --namespace cert-manager \
+		create secret \
+		generic devopslabolatory-org-ca \
+		--from-file=tls.key=ca.key \
+		--from-file=tls.crt=ca.crt \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets -oyaml - | \
+		kubectl patch -f - \
+		-p '{"spec": {"template": {"metadata": {"annotations": {"argocd.argoproj.io/sync-wave":"0"}}}}}' \
+		--dry-run=client \
+		--type=merge \
+		--local -oyaml > ./configs/cert-manager/local/extras/ca-secret.yaml
+	sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ca.crt
+
+cloudflare-tunnel:
+	@if [ ! -f ~/.cloudflared/cert.pem ]; then \
+		echo "The cert.pem file does not exist. Running cloudflared tunnel login ..."; \
+		cloudflared tunnel login; \
+		cloudflared tunnel create devopslabolatory; \
+	else \
+		echo "The cert.pem file already exists."; \
+	fi
+	@if kubectl get namespace cloudflare >/dev/null 2>&1; then \
+		echo "Namespace cloudflare already exists."; \
+	else \
+		echo "Namespace cloudflare does not exist. Creating..."; \
+		kubectl create namespace cloudflare; \
+		echo "Namespace cloudflare has been created."; \
+	fi
+	@echo "Creating secrets ..."
+	@kubectl --namespace cloudflare \
+		create secret \
+		generic tunnel-credentials \
+		--from-file=credentials.json=$(HOME)/.cloudflared/$(CLOUDFLARE_TUNNEL_ID).json \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		tee ./configs/cloudflare-tunnel/local/extras/secret-tunnel-credentials.yaml
+	@kubectl --namespace cloudflare \
+		create secret \
+		generic cloudflare-api-key \
+		--from-literal=apiKey=$(CLOUDFLARE_API_KEY) \
+		--from-literal=email=$(CLOUDFLARE_EMAIL) \
+		--output json \
+		--dry-run=client | \
+		kubeseal --format yaml \
+		--controller-name=sealed-secrets \
+		--controller-namespace=sealed-secrets | \
+		tee ./configs/cloudflare-tunnel/local/extras/secret-api-key.yaml
+
+external-dns:
+	kubectl --namespace external-dns \
+	create secret \
+	generic cloudflare-api-key \
+	--from-literal=cloudflare_api_key=$(CLOUDFLARE_API_KEY) \
+	--from-literal=email=$(CLOUDFLARE_EMAIL) \
+	--output json \
+	--dry-run=client | \
+	kubeseal --format yaml \
+	--controller-name=sealed-secrets \
+	--controller-namespace=sealed-secrets | \
+	tee ./configs/external-dns/local/extras/secret-api-key.yaml > /dev/null
+
+argo-cd-oauth:
 	kubectl --namespace argocd \
 	create secret \
-	generic repo-devops-tools \
-	--from-literal=type=git \
-	--from-literal=url=git@github.com:$(GITHUB_USERNAME)/devops-toys.git \
-	--from-file=sshPrivateKey=devops-toys \
-	--dry-run=client -oyaml | \
+	generic argocd-google-oauth-client \
+	--from-literal=client_id=$(GOOGLE_CLIENT_ID) \
+	--from-literal=client_secret=$(GOOGLE_CLIENT_SECRET) \
+	--output json \
+	--dry-run=client | \
+	kubeseal --format yaml \
+	--controller-name=sealed-secrets \
+	--controller-namespace=sealed-secrets | \
+	kubectl patch -f - \
+	-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
+	--type=merge \
+	--local -o yaml > ./configs/argo-cd/local/extras/argocd-google-oauth-client.yaml
+	kubectl --namespace argocd \
+	create secret \
+	generic argocd-google-domain-wide-sa-json \
+	--from-file=googleAuth.json=devopslaboratory-f90072620e7c.json \
+	--output json \
+	--dry-run=client | \
 	kubeseal --format yaml \
 	--controller-name=sealed-secrets \
 	--controller-namespace=sealed-secrets -oyaml - | \
 	kubectl patch -f - \
-	-p '{"spec": {"template": {"metadata": {"labels": {"argocd.argoproj.io/secret-type":"repository"}}}}}' \
+	-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
 	--dry-run=client \
 	--type=merge \
-	--local -oyaml > ./devops-app/bootstrap/manifests/repo-devops-toys.yaml
-	git add ./devops-app/bootstrap/manifests/repo-devops-toys.yaml
-	git commit -m "Add devops-toys repo to Argocd"
-	git push
-
-ca: ca_key ca_cert ca_cert_secret ca_trusted
-
-# Generate a CA key
-ca_key:
-	openssl genrsa -out ca.key 4096
-
-# Generate a CA certificate
-ca_cert:
-	openssl req -new -x509 -sha256 -days 3650 \
-  	-key ca.key \
-  	-out ca.crt \
-  	-subj '/CN=$(CN)/emailAddress=$(GITHUB_EMAIL)/C=$(C)/ST=$(ST)/L=$(L)/O=$(O)/OU=$(OU)'
-
-# Create a CA certificate secret
-ca_cert_secret:
-	kubectl --namespace cert-manager \
-  create secret \
-  generic local.devops-ca \
-  --from-file=tls.key=ca.key \
-  --from-file=tls.crt=ca.crt \
-  --output json \
-  --dry-run=client | \
-  kubeseal --format yaml \
-  --controller-name=sealed-secrets \
-  --controller-namespace=sealed-secrets | \
-  tee devops-app/bootstrap/manifests/ca-secret.yaml
-	kubectl apply -f ./devops-app/bootstrap/manifests/ca-secret.yaml
-	git add ./devops-app/bootstrap/manifests/ca-secret.yaml
-	git commit -m "Add CA cert secret"
-	git push
-
-# Add the CA certificate to the trusted certificates
-ca_trusted:
-	# For Arch Linux
-	sudo cp ca.crt /etc/ca-certificates/trust-source/anchors
-	sudo update-ca-trust
-	# For Debian/Ubuntu
-	#sudo cp ca.crt /usr/local/share/ca-certificates
-	#sudo update-ca-certificates
-
-minio: minio_users minio_root
-
-# Create a MinIO user secret
-minio_users:
-	kubectl --namespace minio \
+	--local -oyaml > ./configs/argo-cd/local/extras/argocd-google-domain-wide-sa-json.yaml
+	kubectl --namespace argocd \
+	create secret \
+	generic argo-workflows-sso \
+	--from-literal=client-id=$(ARGO_WORKFLOWS_CLIENT_ID) \
+	--from-literal=client-secret=$(ARGO_WORKFLOWS_CLIENT_SECRET) \
+	--output json \
+	--dry-run=client | \
+	kubeseal --format yaml \
+	--controller-name=sealed-secrets \
+	--controller-namespace=sealed-secrets | \
+	kubectl patch -f - \
+	-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
+	--type=merge \
+	--local -oyaml > ./configs/argo-cd/local/extras/argo-workflows-sso.yaml
+	# Key for Github App
+	kubectl --namespace argocd \
 		create secret \
-		generic centralized-minio-users \
-		--from-file=user=/dev/stdin <<< $$(echo -e "username=${MINIO_USERNAME}\npassword=${MINIO_PASSWORD}\ndisabled=false\npolicies=readwrite,consoleAdmin,diagnostics\nsetPolicies=false") \
+		generic argocd-notifications-secret \
+		--from-file=github-privateKey=devops-toys.2024-10-04.private-key.pem \
 		--output json \
 		--dry-run=client | \
 		kubeseal --format yaml \
 		--controller-name=sealed-secrets \
-		--controller-namespace=sealed-secrets | \
-		tee ./devops-app/bootstrap/manifests/minio-users-secret.yaml
-	kubectl apply -f ./devops-app/bootstrap/manifests/minio-users-secret.yaml
-	git add ./devops-app/bootstrap/manifests/minio-users-secret.yaml
-	git commit -m "Add MinIO users secret"
-	git push
+		--controller-namespace=sealed-secrets -oyaml - | \
+		kubectl patch -f - \
+		-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
+		--dry-run=client \
+		--type=merge \
+		--local -oyaml > ./configs/argo-cd/local/extras/secret-devops-toys-github-app.yaml
 
-# Create a MinIO root user secret
-minio_root:
-	kubectl --namespace minio \
-		create secret \
-		generic minio-root \
-		--from-literal=root-user=$(MINIO_ROOT_USER) \
-		--from-literal=root-password=$(MINIO_ROOT_PASSWORD) \
-		--output json \
-		--dry-run=client | \
-		kubeseal --format yaml \
-		--controller-name=sealed-secrets \
-		--controller-namespace=sealed-secrets | \
-		tee ./devops-app/bootstrap/manifests/minio-root-secret.yaml
-	kubectl apply -f ./devops-app/bootstrap/manifests/minio-root-secret.yaml
-	git add ./devops-app/bootstrap/manifests/minio-root-secret.yaml
-	git commit -m "Add MinIO root credentials"
-	git push
+# argo-cd: argo-cd-oauth
+argo-workflows:
+	kubectl create namespace argo
+	kubectl --namespace argo \
+	create secret \
+	generic argo-workflows-sso \
+	--from-literal=client-id=$(ARGO_WORKFLOWS_CLIENT_ID) \
+	--from-literal=client-secret=$(ARGO_WORKFLOWS_CLIENT_SECRET) \
+	--output json \
+	--dry-run=client | \
+	kubeseal --format yaml \
+	--controller-name=sealed-secrets \
+	--controller-namespace=sealed-secrets | \
+	tee ./configs/argo-workflows/local/extras/argo-workflows-sso.yaml > /dev/null
 
-sonarqube: sonarqube_psql_backup sonarqube_credentials
+argo-events:
+	# Webhook secret for fpi
+	kubectl --namespace argo-events \
+	create secret generic webhook-secret-fpi \
+	--from-literal=secret=$(FPI_WEBHOOK_SECRET) \
+	--output json \
+	--dry-run=client | \
+	kubeseal --format yaml \
+	--controller-name=sealed-secrets \
+	--controller-namespace=sealed-secrets | \
+	tee ./configs/argo-events/local/extras/secret-webhook-fpi.yaml
+	# GH token for fpi
+	kubectl --namespace argo-events \
+	create secret generic gh-token-fpi \
+	--from-literal=token=$(FPI_GITHUB_TOKEN) \
+	--output json \
+	--dry-run=client | \
+	kubeseal --format yaml \
+	--controller-name=sealed-secrets \
+	--controller-namespace=sealed-secrets | \
+	tee ./configs/argo-events/local/extras/secret-gh-token-fpi.yaml
+	# Webhook secret for dt
+	kubectl --namespace argo-events \
+	create secret generic webhook-secret-dt \
+	--from-literal=secret=$(DT_WEBHOOK_SECRET) \
+	--output json \
+	--dry-run=client | \
+	kubeseal --format yaml \
+	--controller-name=sealed-secrets \
+	--controller-namespace=sealed-secrets | \
+	tee ./configs/argo-events/local/extras/secret-webhook-dt.yaml
+	# GH token for dt
+	kubectl --namespace argo-events \
+	create secret generic gh-token-dt \
+	--from-literal=token=$(DT_GITHUB_TOKEN) \
+	--output json \
+	--dry-run=client | \
+	kubeseal --format yaml \
+	--controller-name=sealed-secrets \
+	--controller-namespace=sealed-secrets | \
+	tee ./configs/argo-events/local/extras/secret-gh-token-dt.yaml
 
-# Create a SonarQube PostgreSQL backup secret
-sonarqube_psql_backup:
-	kubectl --namespace sonarqube \
-		create secret \
-		generic minio-creds \
-		--from-literal=accesskey=${MINIO_USERNAME} \
-		--from-literal=secretkey=${MINIO_PASSWORD} \
-		--output json \
-		--dry-run=client | \
-		kubeseal --format yaml \
-		--controller-name=sealed-secrets \
-		--controller-namespace=sealed-secrets | \
-		tee ./devops-app/bootstrap/manifests/sonarqube-psql-backup.yaml
-	kubectl apply -f ./devops-app/bootstrap/manifests/sonarqube-psql-backup.yaml
-	git add ./devops-app/bootstrap/manifests/sonarqube-psql-backup.yaml
-	git commit -m "Add SonarQube PostgreSQL backup credentials"
-	git push
+commit-secrets:
+	@echo "Committing newly created secrets..."
+	@git add configs
+	@git commit -m "Add valid secrets"
+	@git push
 
-# Create a SonarQube admin password secret
-sonarqube_credentials:
-	kubectl --namespace sonarqube \
-		create secret \
-		generic admin \
-		--from-literal=sonarqube-password=${SONARQUBE_ADMIN_PASSWORD} \
-		--output json \
-		--dry-run=client | \
-		kubeseal --format yaml \
-		--controller-name=sealed-secrets \
-		--controller-namespace=sealed-secrets | \
-		tee ./devops-app/bootstrap/manifests/sonarqube-admin-password.yaml
-	kubectl apply -f ./devops-app/bootstrap/manifests/sonarqube-admin-password.yaml
-	git add ./devops-app/bootstrap/manifests/sonarqube-admin-password.yaml
-	git commit -m "Add SonarQube admin password secret"
-	git push
+devops-app:
+	@echo "Creating DevOps App..."
+	@kubectl apply -f devops-app.yaml
 
-# Bootstrap the devops-app
-bootstrap:
-	kustomize build ./devops-app/bootstrap | kubectl apply -f -
+all: cluster initial-argocd-setup grafana-alloy sealed-secrets cert-manager cloudflare-tunnel external-dns argo-workflows argo-events argo-cd-oauth commit-secrets devops-app
 
-# Configure ArgoCD
-argocd:
-	ARGOCD_PASSWORD=$$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) && echo $$ARGOCD_PASSWORD
-	kubectl port-forward -n argocd svc/argocd-server 8081:80 & echo $$! > /tmp/port-forward.pid & sleep 5
-	argocd login localhost:8081 --insecure --grpc-web --username admin --password $$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
-	argocd account update-password --current-password $$(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) --new-password $(ARGOCD_PASSWORD)
-	kill $$(cat /tmp/port-forward.pid) && rm -f /tmp/port-forward.pid
-
-all: cluster_local initial_setup add_repo ca minio sonarqube bootstrap argocd
-
-# Destroy the local Kubernetes cluster
+# Teardown 
 destroy:
-	kind delete cluster --name local 
+	kind delete cluster --name devops-toys

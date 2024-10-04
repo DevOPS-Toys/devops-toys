@@ -1,0 +1,7 @@
+installCRDs: true
+prometheus:
+  enabled: true
+  servicemonitor:
+    enabled: true
+  podmonitor:
+    enabled: false

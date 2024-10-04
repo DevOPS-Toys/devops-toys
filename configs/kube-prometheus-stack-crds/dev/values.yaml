@@ -1,0 +1,2 @@
+nameOverride: kube-prometheus-stack-crds
+fullnameOverride: kube-prometheus-stack-crds
