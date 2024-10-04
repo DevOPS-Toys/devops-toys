@@ -137,4 +137,33 @@ applicationSet:
       selector:
         release: prometheus
 notifications:
-  enabled: false
+  enabled: true
+  notifiers:
+    service.github: |
+    appID: 1015830
+    installationID: 55589468
+    privateKey: $devops-toys-github-app
+  templates:
+    template.github-app-deployed: |
+      message: |
+        Application {{.app.metadata.name}} is now running new version of deployments manifests.
+      github:
+        repoURLPath: "{{.app.spec.source.repoURL}}"
+        revisionPath: "{{.app.status.operationState.syncResult.revision}}"
+        status:
+          state: success
+          label: "continuous-delivery/{{.app.metadata.name}}"
+          targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+        deployment:
+          state: success
+          environment: production
+          environmentURL: "https://{{.app.metadata.name}}.example.com"
+          logURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+          requiredContexts: []
+          autoMerge: true
+          transientEnvironment: false
+          reference: v1.0.0
+        pullRequestComment:
+          content: |
+            Application {{.app.metadata.name}} is now running new version of deployments manifests.
+            See more here: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true
