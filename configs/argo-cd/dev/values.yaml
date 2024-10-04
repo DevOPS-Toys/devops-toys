@@ -1,5 +1,7 @@
 nameOverride: argocd
 fullnameOverride: argocd
+global:
+  domain: cd-dev.devopslaboratory.org
 extraObjects:
   - apiVersion: v1
     kind: Secret
@@ -131,6 +133,7 @@ applicationSet:
         release: prometheus
 notifications:
   enabled: true
+  argocdUrl: cd-dev.devopslaboratory.org
   secret:
     create: false
   notifiers:
