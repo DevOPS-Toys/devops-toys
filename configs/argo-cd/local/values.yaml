@@ -152,8 +152,8 @@ notifications:
     template.app-deployed: |
       message: |
         Application {{.app.metadata.name}} is now running new version of deployments manifests.
-  github:
-    status:
-      state: success
-      label: "continuous-delivery/{{.app.metadata.name}}"
-      targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+      github:
+        status:
+          state: success
+          label: "continuous-delivery/{{.app.metadata.name}}"
+          targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
