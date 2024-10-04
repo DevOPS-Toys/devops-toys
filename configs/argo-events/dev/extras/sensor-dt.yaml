@@ -37,7 +37,7 @@ spec:
                 serviceAccountName: workflow
                 podGC:
                   strategy: OnWorkflowCompletion
-                  deleteDelayDuration: 30s
+                  deleteDelayDuration: 30m
                 entrypoint: main
                 arguments:
                   parameters:
@@ -74,7 +74,7 @@ spec:
                         - name: branch
                         - name: target_branch
                         - name: app_repo
-                        - name: organisation
+                        - name: organization
                     script:
                       image: alpine:3.14
                       command: [sh]
@@ -90,7 +90,7 @@ spec:
                         echo "Source Branch  : {{inputs.parameters.branch}}"
                         echo "Target Branch  : {{inputs.parameters.target_branch}}"
                         echo "App Repo      : {{inputs.parameters.app_repo}}"
-                        echo "Organisation  : {{inputs.parametes.organisation}}"
+                        echo "Organization  : {{inputs.parametes.organization}}"
           parameters:
             - src:
                 dependencyName: github-pull-request
@@ -130,5 +130,5 @@ spec:
               dest: spec.arguments.parameters.8.value
             - src:
                 dependencyName: github-pull-request
-                dataKey: body.repository.owner.login
+                dataKey: body.organization.login
               dest: spec.arguments.parameters.9.value
