@@ -143,7 +143,7 @@ notifications:
       privateKey: $github-privateKey
     trigger.on-deployed: |
       - description: Application is synced and healthy. Triggered once per commit.
-        oncePer: app.status.operationState.syncResult.revision
+        # oncePer: app.status.operationState.syncResult.revision
         send:
           - app-deployed
         when: app.status.operationState.phase in ['Succeeded'] and
