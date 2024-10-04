@@ -143,15 +143,16 @@ notifications:
       privateKey: $github-privateKey
     trigger.on-deployed: |
       - description: Application is synced and healthy. Triggered once per commit.
+        oncePer: app.status.operationState.syncResult.revision
         send:
           - app-deployed
         when: app.status.operationState.phase in ['Succeeded'] and
           app.status.health.status == 'Healthy'
-    template.app-deployed: |
+    template.app-deployed: >
       message: |
         Application {{.app.metadata.name}} is now running new version of deployments manifests.
       github:
         status:
           state: success
-          label: "continuous-delivery/{{.app.metadata.name}}"
+          label: "argo-cd/{{.app.metadata.name}}"
           targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
