@@ -142,7 +142,7 @@ notifications:
     service.github: |
     appID: "1015830"
     installationID: "55589468"
-    privateKey: $argocd-notifications-secret
+    privateKey: $github-privateKey
   templates:
     template.app-deployed: |
       message: |
