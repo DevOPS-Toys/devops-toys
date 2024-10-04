@@ -143,7 +143,12 @@ notifications:
       appID: "1015830"
       installationID: "55589468"
       privateKey: $github-privateKey
-  templates:
+    trigger.on-deployed: |
+      - description: Application is synced and healthy. Triggered once per commit.
+        send:
+          - app-deployed
+        when: app.status.operationState.phase in ['Succeeded'] and
+          app.status.health.status == 'Healthy'
     template.app-deployed: |
       message: |
         Application {{.app.metadata.name}} is now running new version of deployments manifests.
