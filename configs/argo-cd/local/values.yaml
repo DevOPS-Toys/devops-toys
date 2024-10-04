@@ -139,7 +139,7 @@ applicationSet:
 notifications:
   enabled: true
   notifiers:
-    service.github:
+    service.github: |
       appID: "1015830"
       installationID: "55589468"
       privateKey: $github-privateKey
