@@ -21,6 +21,15 @@ spec:
               - edited
               - reopened
               - synchronize
+          - path: body.pull_request.title
+            type: string
+            value:
+              - "(?i)^feat:.*"
+              - "(?i)^breaking change:.*"
+              - "(?i)^fix:.*"
+              - "(?i)^doc:.*"
+              - "(?i)^perf:.*"
+              - "(?i)^refactor:.*"
   triggers:
     - template:
         name: github-pr-workflow-trigger

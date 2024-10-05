@@ -107,7 +107,6 @@ server:
   ingress:
     enabled: true
     annotations:
-      #cert-manager.io/cluster-issuer: devops-local
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
@@ -131,6 +130,7 @@ applicationSet:
         release: prometheus
       selector:
         release: prometheus
+
 notifications:
   enabled: true
   argocdUrl: https://cd-dev.devopslaboratory.org
@@ -160,7 +160,7 @@ notifications:
           targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
         deployment:
           state: success
-          environment: production
+          environment: dev
           environmentURL: "https://{{.app.metadata.name}}.example.com"
           logURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
           requiredContexts: []
