@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.1.0-rc.3 (2024-10-05)
+
+### Feature
+
+* feat: DT-1: add pipeline ([`daf25dd`](https://github.com/devops-toys/devops-toys/commit/daf25dd1ba284a4f248892bc8fc604189eafb74a))
+
 ## v0.1.0-rc.2 (2024-10-05)
 
 ### Feature
