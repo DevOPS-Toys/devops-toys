@@ -1,0 +1,4 @@
+nameOverride: cloudnative-pg
+fullnameOverride: cloudnative-pg
+config:
+  secret: true
