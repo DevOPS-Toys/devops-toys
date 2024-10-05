@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: ci-devops-app
+spec:
+  serviceAccountName: workflow
+  podGC:
+    strategy: OnWorkflowCompletion
+    deleteDelayDuration: 30m
+  volumes:
+    - name: git-credentials
+      secret:
+        secretName: git-credentials
+  entrypoint: main
+  parameters:
+    - name: pr_number
+      value: '1'
+    - name: pr_title
+      value: 'title'
+    - name: pr_url
+      value: 'url'
+    - name: pr_user
+      value: 'user'
+    - name: sha 
+      value: 'sha'
+    - name: short_sha
+      value: 'short_sha'
+    - name: branch
+      value: 'branch'
+    - name: target_branch 
+      value: 'target_branch'
+    - name: app_repo
+      value: 'repo'
+    - name: organization
+      value: 'organization'
+    - name: github_user_email
+      value: 'tomasz@wostal.eu'
+    - name: github_user_name
+      value: 'tomasz@wostal.eu'
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: notify-start
+            templateRef:
+              name: notify
+              template: main
+            arguments:
+              parameters:
+                - name: state
+                  value: pending
+          - name: git-checkout-pr
+            templateRef:
+              name: git-checkout-pr
+              template: git-checkout-pr
+          - name: determine-version
+            templateRef:
+              name: determine-version
+              template: determine-version
+            depends: git-checkout-pr
+          - name: create-prelease
+            templateRef:
+              name: create-prelease
+              template: create-prelease
+            arguments:
+              artifacts:
+                - name: git_repo
+                  from: "{{tasks.git-checkout-pr.outputs.artifacts.git_repo}}"
+              parameters:
+                - name: version_type
+                  value: "{{tasks.determine-version.outputs.parameters.version_type}}"
+            depends: determine-version
+

@@ -4,11 +4,12 @@ metadata:
   name: devops-app
   namespace: argocd
   annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
     notifications.argoproj.io/subscribe.on-deployed.github: ""
 spec:
   project: default
   source:
-    repoURL: https://github.com/tomasz-wostal-eu/devops-toys.git
+    repoURL: https://github.com/devops-toys/devops-toys.git
     targetRevision: dev
     path: applicationsets
   destination:
@@ -16,7 +17,11 @@ spec:
     namespace: argocd
   syncPolicy:
     syncOptions:
-    - CreateNamespace=true  
+      - CreateNamespace=true
+      - ServerSideApply=false
+      - FailOnSharedResource=true
+      - RespectIgnoreDifferences=true
+      - PruneLast=true 
     automated: 
       prune: true 
       selfHeal: true
