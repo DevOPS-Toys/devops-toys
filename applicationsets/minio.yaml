@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: minio
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: dev
+        url: https://kubernetes.default.svc
+  template:
+    metadata:
+      name: '{{cluster}}-minio'
+    spec:
+      project: core
+      destination:
+        namespace: minio
+        server: '{{url}}'
+      sources:
+        - repoURL: 'registry-1.docker.io/bitnamicharts'
+          targetRevision: 12.*.*
+          chart: minio
+          helm:
+            releaseName: minio
+            valueFiles:
+              - $values/configs/minio/{{cluster}}/values.yaml
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          targetRevision: dev
+          ref: values
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          path: configs/minio/{{cluster}}/extras
+          targetRevision: dev
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=false
+          - FailOnSharedResource=true
+          - RespectIgnoreDifferences=true
+          - PruneLast=true

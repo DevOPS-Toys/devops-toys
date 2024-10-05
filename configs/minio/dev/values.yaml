@@ -1,0 +1,20 @@
+nameOverride: minio
+fullnameOverride: minio
+mode: standalone
+defaultBuckets: "argo-workflows"
+persistence:
+  enabled: false
+metrics:
+  serviceMonitor:
+    enabled: true
+  prometheusRule:
+    enabled: true
+auth:
+  existingSecret: minio-root
+  forcePassword: true
+  useCredentialsFile: true
+  forceNewKeys: true
+provisioning:
+  enabled: true
+  usersExistingSecrets:
+    - centralized-minio-users
