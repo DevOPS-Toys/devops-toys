@@ -62,6 +62,10 @@ spec:
                       value: ""
                     - name: organization
                       value: ""
+                    - name: github_user_name
+                      value: ""
+                    - name: github_user_email
+                      value: ""
           parameters:
             - src:
                 dependencyName: github-pull-request
