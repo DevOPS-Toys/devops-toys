@@ -19,10 +19,3 @@ spec:
             name: dt-eventsource-svc
             port:
               number: 12000
-      - path: /fpi
-        pathType: Prefix
-        backend:
-          service:
-            name: fpi-eventsource-svc
-            port:
-              number: 12000
