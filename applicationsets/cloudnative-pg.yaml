@@ -24,7 +24,7 @@ spec:
           chart: cloudnative-pg
           targetRevision: 0.*.*
           helm:
-            releaseName: cloudnative-pg
+            releaseName: cnpg
             valueFiles:
               - $values/configs/cloudnative-pg/{{cluster}}/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
