@@ -29,7 +29,7 @@ spec:
           helm:
             releaseName: external-dns
             valueFiles:
-              - $values/values/{{cluster}}/externa-dns/values.yaml
+              - $values/values/{{cluster}}/external-dns/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
           targetRevision: '{{revision}}'
           ref: values

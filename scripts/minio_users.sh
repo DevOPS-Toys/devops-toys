@@ -16,6 +16,6 @@ kubectl --namespace minio create secret generic centralized-minio-users \
 --output json \
 --dry-run=client | kubeseal --format yaml \
 --controller-name=sealed-secrets \
---controller-namespace=sealed-secrets | tee ./manifesta/dev/minio/secret-minio-users.yaml > /dev/null
+--controller-namespace=sealed-secrets | tee ./manifests/dev/minio/secret-minio-users.yaml > /dev/null
 
 rm -f ./temp_user_config.txt
