@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.1.0-rc.9 (2024-10-06)
+
+### Feature
+
+* feat: DT-1: add pipeline ([`efc1adc`](https://github.com/devops-toys/devops-toys/commit/efc1adc139035ea7720d2a0b192638d26a52774b))
+
 ## v0.1.0-rc.8 (2024-10-06)
 
 ### Feature
