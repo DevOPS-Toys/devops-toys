@@ -21,6 +21,7 @@ match = "(main|master)"
 prerelease = false
 
 [tool.semantic_release.branches."2.x.x"]
+update_version_file = true
 match = "dev"
 prerelease = true
 prerelease_token = "rc"
