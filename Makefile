@@ -331,7 +331,7 @@ argo-events-webhook-secret:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/argo-events/dev/extras/secret-webhook-dt.yaml > /dev/null
+		tee ./manifests/dev/argo-events/secret-webhook-dt.yaml > /dev/null
 
 argo-events-github-token:
 	@if kubectl get namespace argo-events >/dev/null 2>&1; then \
