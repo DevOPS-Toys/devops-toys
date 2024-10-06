@@ -28,7 +28,7 @@ spec:
       source:
         repoURL: https://github.com/devops-toys/devops-toys.git
         targetRevision: dev
-        path: "apps/{{appName}}.yaml"
+        path: "apps/{{appName}}"
         helm:
           releaseName: "{{appName}}"
           valueFiles:
