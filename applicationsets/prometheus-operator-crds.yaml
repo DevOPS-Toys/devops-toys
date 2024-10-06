@@ -12,6 +12,7 @@ spec:
       elements:
       - cluster: dev
         url: https://kubernetes.default.svc
+        revision: dev
   template:
     metadata:
       name: '{{cluster}}-prometheus-operator-crds'
@@ -29,7 +30,7 @@ spec:
             valueFiles:
               - $values/values/{{cluster}}/prometheus-operator-crds/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: dev
+          targetRevision: {{revision}}
           ref: values
       syncPolicy:
         automated:

@@ -172,9 +172,9 @@ argocd-oauth-client-secret:
 		kubectl patch -f - \
 			-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
 			--type=merge \
-			--local -o yaml > ./configs/argo-cd/dev/extras/argocd-google-oauth-client.yaml
+			--local -o yaml > ./manifests/dev/argo-cd/secret-argocd-google-oauth-client.yaml
 
-argocd-google-domain-wide-sa-json:
+argocd-google-sa:
 	@if kubectl get namespace argocd >/dev/null 2>&1; then \
 		echo "Namespace argocd already exists."; \
 	else \
@@ -196,7 +196,7 @@ argocd-google-domain-wide-sa-json:
 			-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
 			--dry-run=client \
 			--type=merge \
-			--local -oyaml > ./configs/argo-cd/dev/extras/argocd-google-domain-wide-sa-json.yaml
+			--local -oyaml > ./manifests/dev/argo-cd/secret-argocd-google-sa.yaml
 
 argocd-argo-workflows-sso:
 	@if kubectl get namespace argocd >/dev/null 2>&1; then \
@@ -220,7 +220,7 @@ argocd-argo-workflows-sso:
 		kubectl patch -f - \
 			-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
 			--type=merge \
-			--local -oyaml > ./configs/argo-cd/dev/extras/argo-workflows-sso.yaml
+			--local -oyaml > ./manifests/dev/argo-cd/secret-argo-workflows-sso.yaml
 
 argocd-notifications-secret:
 	@if kubectl get namespace argocd >/dev/null 2>&1; then \
@@ -244,9 +244,9 @@ argocd-notifications-secret:
 				-p '{"spec": {"template": {"metadata": {"labels": {"app.kubernetes.io/part-of":"argocd"}}}}}' \
 				--dry-run=client \
 				--type=merge \
-				--local -oyaml > ./configs/argo-cd/dev/extras/secret-argocd-notifications.yaml
+				--local -oyaml > ./manifests/dev/argo-cd/secret-argocd-notifications.yaml
 
-argo-cd: argocd-oauth-client-secret argocd-google-domain-wide-sa-json argocd-argo-workflows-sso argocd-notifications-secret
+argo-cd: argocd-oauth-client-secret argocd-google-sa argocd-argo-workflows-sso argocd-notifications-secret
 
 
 argo-workflows-sso-credentials:
@@ -268,7 +268,7 @@ argo-workflows-sso-credentials:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/argo-workflows/dev/extras/argo-workflows-sso.yaml > /dev/null
+		tee ./manifests/dev/argo-workflows/secret-argo-workflows-sso.yaml > /dev/null
 
 argo-workflows-git-credentials:
 	@if kubectl get namespace argo >/dev/null 2>&1; then \
@@ -289,7 +289,7 @@ argo-workflows-git-credentials:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/argo-workflows/dev/extras/secret-git-credentials.yaml > /dev/null
+		tee ./manifests/dev/argo-workflows/secret-git-credentials.yaml > /dev/null
 
 argo-workflows-storage-credentials:
 	@if kubectl get namespace argo >/dev/null 2>&1; then \
@@ -310,7 +310,7 @@ argo-workflows-storage-credentials:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/argo-workflows/dev/extras/secret-storage-credentials.yaml > /dev/null
+		tee ./manifests/dev/argo-workflows/secret-storage-credentials.yaml > /dev/null
 
 argo-workflows: argo-workflows-sso-credentials argo-workflows-git-credentials argo-workflows-storage-credentials
 
@@ -350,7 +350,7 @@ argo-events-github-token:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/argo-events/dev/extras/secret-gh-token-dt.yaml > /dev/null
+		tee ./manifests/dev/argo-events/secret-gh-token-dt.yaml > /dev/null
 
 argo-events: argo-events-webhook-secret argo-events-github-token
 
@@ -365,7 +365,7 @@ minio-root:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/minio/dev/extras/secret-minio-root.yaml
+		tee ./manifests/dev/minio/secret-minio-root.yaml
 
 minio-users:
 	@./scripts/minio_users.sh "${MINIO_USERNAME}" "${MINIO_PASSWORD}"
@@ -374,19 +374,19 @@ minio: minio-root minio-users
 
 commit-secrets:
 	@echo "Committing newly created secrets..."
-	git add configs
+	git add manifests
 	git commit -m "Add valid secrets"
 	git push
 
 devops-app:
 	@echo "Creating DevOps App..."
-	kubectl apply -f devops-app.yaml
+	kubectl apply -f ./app/devops-app.yaml
 
-apply-configs:
-	for dir in configs/*/dev/extras; do \
-		echo "Applying config in $$dir"; \
-		kubectl apply -f $$dir; \
-	done
+# apply-configs:
+# 	for dir in configs/*/dev/extras; do \
+# 		echo "Applying config in $$dir"; \
+# 		kubectl apply -f $$dir; \
+# 	done
 
 all: cluster initial-argocd-setup prometheus-operarator-cdrs sealed-secrets cert-manager cloudflare external-dns argo-cd argo-workflows argo-events minio commit-secrets devops-app
 # Teardown 

@@ -4,6 +4,7 @@ metadata:
   name: argo-workflows
   namespace: argocd
   annotations:
+    argocd.argoproj.io/sync-wave: "2"
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   generators:
@@ -11,8 +12,7 @@ spec:
       elements:
       - cluster: dev
         url: https://kubernetes.default.svc
-      # - cluster: ci
-      #   url: https://c640dbea-09c9-41c7-b6cd-99d80f39cac8.k8s.ondigitalocean.com
+        revision: dev
   template:
     metadata:
       name: '{{cluster}}-argo-workflows'
@@ -28,13 +28,13 @@ spec:
           helm:
             releaseName: argo-workflows
             valueFiles:
-              - $values/configs/argo-workflows/{{cluster}}/values.yaml
+              - $values/values/{{cluster}}/argo-workflows/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: dev
+          targetRevision: {{revision}}
           ref: values
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          path: configs/argo-workflows/{{cluster}}/extras
-          targetRevision: dev
+          path: manifests/{{cluster}}/argo-workflows
+          targetRevision: {{revision}}
       syncPolicy:
         automated:
           selfHeal: true

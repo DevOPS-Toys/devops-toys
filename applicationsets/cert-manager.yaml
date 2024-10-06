@@ -4,6 +4,7 @@ metadata:
   name: cert-manager
   namespace: argocd
   annotations:
+    argocd.argoproj.io/sync-wave: "2"
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   generators:
@@ -11,6 +12,7 @@ spec:
       elements:
       - cluster: dev
         url: https://kubernetes.default.svc
+        revision: dev
   template:
     metadata:
       name: '{{cluster}}-cert-manager'
@@ -26,13 +28,13 @@ spec:
           helm:
             releaseName: cert-manager
             valueFiles:
-              - $values/configs/cert-manager/{{cluster}}/values.yaml
+              - $values/values/{{cluster}}/cert-manager/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: dev
+          targetRevision: {{revision}}
           ref: values
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          path: configs/cert-manager/{{cluster}}/extras
-          targetRevision: dev
+          path: manifests/{{cluster}}/cert-manager
+          targetRevision: {{revision}}
         # - repoURL: https://aureq.github.io/cert-manager-webhook-ovh/
         #   chart: cert-manager-webhook-ovh
         #   targetRevision: 0.4.2

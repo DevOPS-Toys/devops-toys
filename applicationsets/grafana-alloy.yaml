@@ -12,6 +12,7 @@ spec:
       elements:
       - cluster: dev
         url: https://kubernetes.default.svc
+        revision: dev
   template:
     metadata:
       name: '{{cluster}}-grafana-alloy'
@@ -30,7 +31,7 @@ spec:
             valueFiles:
               - $values/values/{{cluster}}/grafana-alloy/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: dev
+          targetRevision: {{revision}}
           ref: values
       syncPolicy:
         automated:

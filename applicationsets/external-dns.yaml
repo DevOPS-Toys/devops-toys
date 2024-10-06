@@ -12,6 +12,7 @@ spec:
       elements:
       - cluster: dev
         url: https://kubernetes.default.svc
+        revision: dev
   template:
     metadata:
       name: '{{cluster}}-external-dns'
@@ -28,13 +29,13 @@ spec:
           helm:
             releaseName: external-dns
             valueFiles:
-              - $values/configs/external-dns/{{cluster}}/values.yaml
+              - $values/values/{{cluster}}/externa-dns/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: dev
+          targetRevision: {{revision}}
           ref: values
         - repoURL: https://github.com/devops-toys/devops-toys.git
           path: manifests/{{cluster}}/external-dns
-          targetRevision: dev
+          targetRevision: {{revision}}
       syncPolicy:
         automated:
           selfHeal: true

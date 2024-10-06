@@ -4,6 +4,7 @@ metadata:
   name: ingress-nginx
   namespace: argocd
   annotations:
+    argocd.argoproj.io/sync-wave: "2"
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   generators:
@@ -11,6 +12,7 @@ spec:
       elements:
       - cluster: dev
         url: https://kubernetes.default.svc
+        revision: dev
   template:
     metadata:
       name: '{{cluster}}-ingress-nginx'
@@ -26,9 +28,9 @@ spec:
           helm:
             releaseName: ingress-nginx
             valueFiles:
-              - $values/configs/ingress-nginx/{{cluster}}/values.yaml
+              - $values/values/{{cluster}}/ingress-nginx/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: dev
+          targetRevision: {{revision}}
           ref: values
       syncPolicy:
         automated:
