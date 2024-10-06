@@ -11,7 +11,7 @@ version_variables = [
   "applicationsets/grafana-agent.yaml:revision: '{version}'",
   "applicationsets/grafana-alloy.yaml:revision: '{version}'",
   "applicationsets/ingress-nginx.yaml:revision: '{version}'",
-  "applicationsets/minio:revision: '{version}'",
+  "applicationsets/minio.yaml:revision: '{version}'",
   "applicationsets/prometheus-operator-crds.yaml:revision: '{version}'",
   "applicationsets/sealed-secrets.yaml:revision: '{version}'"
 ]
