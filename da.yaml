@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-apps
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  env: dev
+          - clusters:
+              selector:
+                matchLabels:
+                  env: stg
+          - list:
+              elements:
+              - appName: grafana-alloy
+                syncWave: 0
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+    spec:
+      project: core
+      sources:
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          targetRevision: dev
+          path: "charts/{{appName}}"
+          helm:
+            releaseName: "{{appName}}"
+            valueFiles:
+            - "values.yaml"
+            - "../../values/{{name}}/{{appName}}/values.yaml"
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          path: manifests/{{name}}/{{appName}}
+          targetRevision: dev
+      destination:
+        name: "{{name}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        retry:
+          limit: 2              

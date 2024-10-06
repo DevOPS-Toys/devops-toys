@@ -5,8 +5,20 @@ featureGates:
   APIServerTracing: true
 nodes:
   - role: control-plane
+    labels:
+      env: dev
   - role: worker
+    labels:
+      env: dev
   - role: worker
+    labels:
+      env: dev
   - role: worker
+    labels:
+      env: dev
   - role: worker
+    labels:
+      env: dev
   - role: worker
+    labels:
+      env: dev
