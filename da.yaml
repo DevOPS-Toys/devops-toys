@@ -15,6 +15,7 @@ spec:
               elements:
                 - appName: grafana-alloy
                   syncWave: "0"
+                  revision: "0.*.*"
                   namespace: grafana-alloy
   template:
     metadata:
@@ -27,7 +28,7 @@ spec:
       source:
         repoURL: https://github.com/devops-toys/devops-toys.git
         targetRevision: dev
-        path: "charts/{{appName}}"
+        path: "apps/{{appName}}.yaml"
         helm:
           releaseName: "{{appName}}"
           valueFiles:
