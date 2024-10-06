@@ -30,11 +30,11 @@ spec:
             valueFiles:
               - $values/values/{{cluster}}/cert-manager/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: {{revision}}
+          targetRevision: '{{revision}}'
           ref: values
         - repoURL: https://github.com/devops-toys/devops-toys.git
           path: manifests/{{cluster}}/cert-manager
-          targetRevision: {{revision}}
+          targetRevision: '{{revision}}'
         # - repoURL: https://aureq.github.io/cert-manager-webhook-ovh/
         #   chart: cert-manager-webhook-ovh
         #   targetRevision: 0.4.2

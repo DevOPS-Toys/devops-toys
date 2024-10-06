@@ -31,11 +31,11 @@ spec:
             valueFiles:
               - $values/values/{{cluster}}/externa-dns/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: {{revision}}
+          targetRevision: '{{revision}}'
           ref: values
         - repoURL: https://github.com/devops-toys/devops-toys.git
           path: manifests/{{cluster}}/external-dns
-          targetRevision: {{revision}}
+          targetRevision: '{{revision}}'
       syncPolicy:
         automated:
           selfHeal: true

@@ -30,7 +30,7 @@ spec:
             valueFiles:
               - $values/values/{{cluster}}/ingress-nginx/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          targetRevision: {{revision}}
+          targetRevision: '{{revision}}'
           ref: values
       syncPolicy:
         automated:
