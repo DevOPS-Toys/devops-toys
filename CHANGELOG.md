@@ -1,5 +1,63 @@
 # CHANGELOG
 
+## v0.1.0-rc.4 (2024-10-06)
+
+### Feature
+
+* feat: DT-1: add pipeline ([`58935cc`](https://github.com/devops-toys/devops-toys/commit/58935ccef5b1b9d3a6058e323095b906698f942a))
+
+* feat: DT-1: add pipeline ([`ac0fce5`](https://github.com/devops-toys/devops-toys/commit/ac0fce55e89b0dd97725716e3e98e7e78a9e4079))
+
+* feat: DT-1: add pipeline ([`28aac78`](https://github.com/devops-toys/devops-toys/commit/28aac787a876485647c336ad2835f9b8e9447379))
+
+* feat: DT-1: add pipeline ([`f83f702`](https://github.com/devops-toys/devops-toys/commit/f83f702f387e2b0a3136d2bc02df0cdca2dd57f6))
+
+* feat: DT-1: add pipeline ([`a4c388a`](https://github.com/devops-toys/devops-toys/commit/a4c388aacff004a127abcba907966f1d17dbd576))
+
+* feat: DT-1: add pipeline ([`9ac690c`](https://github.com/devops-toys/devops-toys/commit/9ac690c8aa4abcfa53c850c79699635863317771))
+
+* feat: DT-1: add pipeline ([`99b2d31`](https://github.com/devops-toys/devops-toys/commit/99b2d31f35857a9611f065178fa75fa7644116a4))
+
+* feat: DT-1: add pipeline ([`cbce74b`](https://github.com/devops-toys/devops-toys/commit/cbce74b80be8dd5c1af6063fbf049331768a153f))
+
+* feat: DT-1: add pipeline ([`d5b7c23`](https://github.com/devops-toys/devops-toys/commit/d5b7c23298a59d3af7b218058dfd6825bb19887f))
+
+* feat: DT-1: add pipeline ([`a858cff`](https://github.com/devops-toys/devops-toys/commit/a858cff0a7d9ac3d21068b017155f03d80ea3152))
+
+* feat: DT-1: add pipeline ([`39373ac`](https://github.com/devops-toys/devops-toys/commit/39373acde1f8bf1762daf7a4c5f5deed8984c6ea))
+
+* feat: DT-1: add pipeline ([`c5fce65`](https://github.com/devops-toys/devops-toys/commit/c5fce6515e7a9f2a3dda66561aa3b783dee5a67d))
+
+* feat: DT-1: add pipeline ([`fa5536a`](https://github.com/devops-toys/devops-toys/commit/fa5536aba2c0628a9c2dd10fd512877f5aa7f9a2))
+
+* feat: DT-1: add pipeline ([`8f5b117`](https://github.com/devops-toys/devops-toys/commit/8f5b11741e2e4a179f41e87aabcce14a5816443c))
+
+* feat: DT-1: add pipeline ([`0dbef05`](https://github.com/devops-toys/devops-toys/commit/0dbef05359bec6870d66ce2760e95a6988fe093a))
+
+* feat: DT-1: add pipeline ([`5eeaa99`](https://github.com/devops-toys/devops-toys/commit/5eeaa99bdb8a49c8f3293dab49c793cb9386dab7))
+
+* feat: DT-1: add pipeline ([`4b87dcf`](https://github.com/devops-toys/devops-toys/commit/4b87dcfccf04652c8927d4f2581e136810158080))
+
+* feat: DT-1: add pipeline ([`454f7de`](https://github.com/devops-toys/devops-toys/commit/454f7de8fe3b0a09b0b280cc0b785836474a071e))
+
+* feat: DT-1: add pipeline ([`70be61a`](https://github.com/devops-toys/devops-toys/commit/70be61a5465b6b50161804acf3bd7fd14fad3154))
+
+* feat: DT-1: add pipeline ([`2174adb`](https://github.com/devops-toys/devops-toys/commit/2174adbe415fbd737bf68a8b601289a82201d1c6))
+
+* feat: DT-1: add pipeline ([`2f1109d`](https://github.com/devops-toys/devops-toys/commit/2f1109dde0e1aa3e1f6ef32f44229bf53de5ebdd))
+
+* feat: DT-1: add pipeline ([`20b4d90`](https://github.com/devops-toys/devops-toys/commit/20b4d904915108d5998f33b9017220323c9790f4))
+
+* feat: DT-1: add pipeline ([`2c9c303`](https://github.com/devops-toys/devops-toys/commit/2c9c303f6a9f3889e76b23764173be24b23585f0))
+
+* feat: DT-1: add pipeline ([`02fd4fc`](https://github.com/devops-toys/devops-toys/commit/02fd4fc7f39f6f05b094f45d5e7b08d2ede75795))
+
+### Unknown
+
+* Add valid secrets ([`2e70ead`](https://github.com/devops-toys/devops-toys/commit/2e70ead54c996acde6970838c3721ed9b686a483))
+
+* Add valid secrets ([`ce3ad82`](https://github.com/devops-toys/devops-toys/commit/ce3ad82ea1ee113dd81a8efe90050d1b1fa9c094))
+
 ## v0.1.0-rc.3 (2024-10-05)
 
 ### Feature
