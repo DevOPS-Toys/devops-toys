@@ -7,14 +7,18 @@ spec:
   generators:
     - matrix:
         generators:
-          - clusters: {}
+          - list:
+              elements:
+              - cluster: dev
+                url: https://kubernetes.default.svc
           - list:
               elements:
               - appName: grafana-alloy
                 syncWave: 0
+                namespace: grafana-alloy
   template:
     metadata:
-      name: "{{name}}-{{appName}}"
+      name: "{{cluster}}-{{appName}}"
       annotations:
         argocd.argoproj.io/manifest-generate-paths: ".;.."
         argocd.argoproj.io/sync-wave: '{{syncWave}}'
@@ -28,12 +32,12 @@ spec:
             releaseName: "{{appName}}"
             valueFiles:
             - "values.yaml"
-            - "../../values/{{name}}/{{appName}}/values.yaml"
+            - "../../values/{{cluster}}/{{appName}}/values.yaml"
         # - repoURL: https://github.com/devops-toys/devops-toys.git
         #   path: manifests/{{name}}/{{appName}}
         #   targetRevision: dev
       destination:
-        name: "{{name}}"
+        name: "{{url}}"
         namespace: "{{namespace}}"
       syncPolicy:
         automated:
