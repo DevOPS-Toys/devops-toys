@@ -4,6 +4,7 @@ metadata:
   name: external-dns
   namespace: argocd
   annotations:
+    argocd.argoproj.io/sync-wave: "1"
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   generators:
@@ -32,7 +33,7 @@ spec:
           targetRevision: dev
           ref: values
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          path: configs/external-dns/{{cluster}}/extras
+          path: manifests/{{cluster}}/external-dns
           targetRevision: dev
       syncPolicy:
         automated:

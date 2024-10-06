@@ -4,6 +4,7 @@ metadata:
   name: cloudflare-tunnel
   namespace: argocd
   annotations:
+    argocd.argoproj.io/sync-wave: "1"
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   generators:
@@ -27,12 +28,12 @@ spec:
           helm:
             releaseName: cloudflare-tunnel
             valueFiles:
-              - $values/configs/cloudflare-tunnel/{{cluster}}/values.yaml
+              - $values/values/{{cluster}}/cloudflare-tunnel/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
           targetRevision: dev
           ref: values
         - repoURL: https://github.com/devops-toys/devops-toys.git
-          path: configs/cloudflare-tunnel/{{cluster}}/extras
+          path: manifests/{{cluster}}/cloudflare-tunnel/
           targetRevision: dev
       syncPolicy:
         automated:

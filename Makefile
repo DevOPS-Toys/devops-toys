@@ -70,7 +70,7 @@ certmanager-secret:
 			-p '{"spec": {"template": {"metadata": {"annotations": {"argocd.argoproj.io/sync-wave":"0"}}}}}' \
 			--dry-run=client \
 			--type=merge \
-			--local -oyaml > ./configs/cert-manager/dev/extras/ca-secret.yaml
+			--local -oyaml > ./manifests/dev/cert-manager/secret-ca.yaml
 
 ca-trusted:
 	sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ca.crt
@@ -104,7 +104,7 @@ cloudflare-tunnel-credentials-secret:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/cloudflare-tunnel/dev/extras/secret-tunnel-credentials.yaml > /dev/null
+		tee ./manifests/dev/cloudflare-tunnel/secret-tunnel-credentials.yaml > /dev/null
 
 cloudflare-api-key-secret:
 	@if kubectl get namespace cloudflare >/dev/null 2>&1; then \
@@ -125,7 +125,7 @@ cloudflare-api-key-secret:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/cloudflare-tunnel/dev/extras/secret-api-key.yaml > /dev/null
+		tee ./manifests/dev/cloudflare-tunnel/secret-api-key.yaml > /dev/null
 
 cloudflare: cloudflare-tunnel cloudflare-tunnel-credentials-secret cloudflare-api-key-secret
 
@@ -148,7 +148,7 @@ external-dns:
 		kubeseal --format yaml \
 			--controller-name=sealed-secrets \
 			--controller-namespace=sealed-secrets | \
-		tee ./configs/external-dns/dev/extras/secret-api-key.yaml > /dev/null
+		tee ./manifests/dev/external-dns/secret-api-key.yaml > /dev/null
 
 argocd-oauth-client-secret:
 	@if kubectl get namespace argocd >/dev/null 2>&1; then \
