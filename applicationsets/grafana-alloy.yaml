@@ -28,7 +28,7 @@ spec:
           helm:
             releaseName: grafana-alloy
             valueFiles:
-              - $values/{{cluster}}/grafana-alloy/values.yaml
+              - $values/values/{{cluster}}/grafana-alloy/values.yaml
         # - repoURL: https://prometheus-community.github.io/helm-charts
         #   chart: prometheus-operator-crds
         #   targetRevision: 7.*.*
