@@ -1,4 +1,4 @@
 nameOverride: grafana-alloy
 fullnameOverride: grafana-alloy
 crds:
-  create: false
+  create: true
