@@ -1,0 +1,2 @@
+nameOverride: prometheus-operator-crds
+fullnameOverride: prometheus-operator-crds

@@ -22,10 +22,10 @@ initial-argocd-setup:
 			--wait
 	@kubectl apply -n argocd -f ./bootstrap/projects.yaml
 
-# grafana-alloy:
-# 	@echo "Installing Grafana Alloy ..."
-# 	@kubectl apply -f ./applicationsets/grafana-alloy.yaml
-# 	@sleep 60
+prometheus-operarator-cdrs:
+	@echo "Installing Prometheus Operator CRDs ..."
+	@kubectl apply -f ./applicationsets/prometheus-operator-crds.yaml
+	@sleep 60
 
 sealed-secrets:
 	@echo "Installing Sealed Secrets ..."
@@ -388,7 +388,7 @@ apply-configs:
 		kubectl apply -f $$dir; \
 	done
 
-all: cluster initial-argocd-setup grafana-alloy sealed-secrets cert-manager cloudflare external-dns argo-cd argo-workflows argo-events minio commit-secrets devops-app
+all: cluster initial-argocd-setup prometheus-operarator-cdrs sealed-secrets cert-manager cloudflare external-dns argo-cd argo-workflows argo-events minio commit-secrets devops-app
 # Teardown 
 destroy:
 	kind delete cluster --name devops-toys
