@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.1.0-rc.7 (2024-10-06)
+
+### Feature
+
+* feat: DT-1: add pipeline ([`40ee992`](https://github.com/devops-toys/devops-toys/commit/40ee992125195f4cd1de34d36ffb663a9c455130))
+
 ## v0.1.0-rc.6 (2024-10-06)
 
 ### Feature
