@@ -12,7 +12,6 @@ spec:
       elements:
       - cluster: dev
         url: https://kubernetes.default.svc
-        dependencies: local-grafana-alloy
   template:
     metadata:
       name: '{{cluster}}-cloudflare-tunnel'
