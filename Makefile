@@ -22,10 +22,10 @@ initial-argocd-setup:
 			--wait
 	@kubectl apply -n argocd -f ./bootstrap/projects.yaml
 
-grafana-alloy:
-	@echo "Installing Grafana Alloy ..."
-	@kubectl apply -f ./applicationsets/grafana-alloy.yaml
-	@sleep 60
+# grafana-alloy:
+# 	@echo "Installing Grafana Alloy ..."
+# 	@kubectl apply -f ./applicationsets/grafana-alloy.yaml
+# 	@sleep 60
 
 sealed-secrets:
 	@echo "Installing Sealed Secrets ..."
