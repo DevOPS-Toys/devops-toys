@@ -4,6 +4,7 @@ metadata:
   name: grafana-alloy
   namespace: argocd
   annotations:
+    argocd.argoproj.io/sync-wave: "0"
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
   generators:
@@ -27,14 +28,14 @@ spec:
           helm:
             releaseName: grafana-alloy
             valueFiles:
-              - $values/configs/grafana-alloy/{{cluster}}/values.yaml
-        - repoURL: https://prometheus-community.github.io/helm-charts
-          chart: prometheus-operator-crds
-          targetRevision: 7.*.*
-          helm:
-            releaseName: kube-prometheus-stack-crds
-            valueFiles:
-              - $values/configs/kube-prometheus-stack-crds/{{cluster}}/values.yaml
+              - $values/{{cluster}}/grafana-alloy/values.yaml
+        # - repoURL: https://prometheus-community.github.io/helm-charts
+        #   chart: prometheus-operator-crds
+        #   targetRevision: 7.*.*
+        #   helm:
+        #     releaseName: kube-prometheus-stack-crds
+        #     valueFiles:
+        #       - $values/configs/kube-prometheus-stack-crds/{{cluster}}/values.yaml
         - repoURL: https://github.com/devops-toys/devops-toys.git
           targetRevision: dev
           ref: values

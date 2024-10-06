@@ -1,45 +1,27 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: devops-app
-#   namespace: argocd
-#   annotations:
-#     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
-#     notifications.argoproj.io/subscribe.on-deployed.github: ""
-# spec:
-#   project: default
-#   source:
-#     repoURL: https://github.com/devops-toys/devops-toys.git
-#     targetRevision: dev
-#     path: applicationsets
-#   destination:
-#     server: https://kubernetes.default.svc
-#     namespace: argocd
-#   syncPolicy:
-#     syncOptions:
-#       - CreateNamespace=true
-#       - ServerSideApply=false
-#       - FailOnSharedResource=true
-#       - RespectIgnoreDifferences=true
-#       - PruneLast=true 
-#     automated: 
-#       prune: true 
-#       selfHeal: true
 apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
+kind: Application
 metadata:
   name: devops-app
   namespace: argocd
   annotations:
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    notifications.argoproj.io/subscribe.on-deployed.github: ""
 spec:
-  generators:
-  - list:
-      elements:
-      - cluster: dev
-        url: https://kubernetes.default.svc
-        applications:
-          - name: prometheus-operator-crds
-            version: 7.*.*
-          - name: grafana-alloy
-            version: 0.*.*
+  project: default
+  source:
+    repoURL: https://github.com/devops-toys/devops-toys.git
+    targetRevision: dev
+    path: applicationsets
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=false
+      - FailOnSharedResource=true
+      - RespectIgnoreDifferences=true
+      - PruneLast=true 
+    automated: 
+      prune: true 
+      selfHeal: true
