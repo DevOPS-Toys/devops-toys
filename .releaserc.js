@@ -33,7 +33,7 @@ module.exports = {
             '@semantic-release/exec',
             {
               prepareCmd:
-                "sed -i 's/targetRevision:.*/targetRevision: v${nextRelease.version}/' devops-app.yaml",
+                "sed -i 's/targetRevision:.*/targetRevision: v${nextRelease.version}/' devops-app.yaml && find applicationsets -type f -name '*.yaml' -exec sed -i 's/revision:.*/revision: v${nextRelease.version}/' {} +",
             },
           ],
           [
