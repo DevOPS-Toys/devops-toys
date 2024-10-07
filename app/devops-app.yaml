@@ -10,10 +10,10 @@ spec:
   project: default
   sources:
     - repoURL: https://github.com/devops-toys/devops-toys.git
-      targetRevision: v1.2.0
+      targetRevision: HEAD
       path: applicationsets
     - repoURL: https://github.com/devops-toys/devops-toys.git
-      targetRevision: v1.2.0
+      targetRevision: HEAD
       path: app
   destination:
     server: https://kubernetes.default.svc
