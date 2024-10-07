@@ -3,7 +3,7 @@ module.exports = {
     'main',
     {
       name: '*',
-      prerelease: true,
+      prerelease: 'rc',
     },
   ],
   plugins: [
