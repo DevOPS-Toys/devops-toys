@@ -22,9 +22,15 @@ spec:
               - reopened
               - synchronize
           - type: expression
-            expression: "!(body.pull_request.title.contains('[skip-ci]'))"
-          - type: expression
-            expression: "!(body.pull_request.body.contains('[skip-ci]'))"
+            exprs:
+              - expr: "!title.contains('[skip-ci]')"
+                fields:
+                  - name: title
+                    path: body.pull_request.title
+              - expr: "!body.contains('[skip-ci]')"
+                fields:
+                  - name: body
+                    path: body.pull_request.body
   triggers:
     - template:
         name: github-pr-workflow-trigger
