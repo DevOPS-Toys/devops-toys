@@ -21,10 +21,8 @@ spec:
               - edited
               - reopened
               - synchronize
-          - path: body.pull_request.title
-            type: string
-            value:
-              - "^(?!.*\\[skip-ci\\]).*$"
+          - type: expression
+            expression: "!(body.pull_request.title.contains('[skip-ci]'))"
   triggers:
     - template:
         name: github-pr-workflow-trigger
