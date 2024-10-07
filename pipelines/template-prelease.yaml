@@ -31,6 +31,8 @@ spec:
               secretKeyRef:
                 name: git-credentials
                 key: token
+          - name: CI
+            value: "true"
         image: node:latest
         command: ["/bin/sh", "-c"]
         args:
