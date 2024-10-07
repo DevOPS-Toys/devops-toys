@@ -65,8 +65,5 @@ spec:
               artifacts:
                 - name: git_repo
                   from: "{{tasks.git-checkout-pr.outputs.artifacts.git_repo}}"
-              parameters:
-                - name: version_type
-                  value: "{{tasks.determine-version.outputs.parameters.version_type}}"
             depends: git-checkout-pr
 
