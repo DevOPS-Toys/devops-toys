@@ -19,6 +19,7 @@ initial-argocd-setup:
 		argocd argo/argo-cd \
 			--namespace argocd \
 			--create-namespace \
+			--set notifications.secret.create=false \
 			--wait
 	@kubectl apply -n argocd -f ./bootstrap/projects.yaml
 
