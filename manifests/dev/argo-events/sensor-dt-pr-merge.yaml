@@ -16,7 +16,7 @@ spec:
             type: string
             value: closed
           - path: body.pull_request.merged
-            type: bool
+            type: string
             value: true
   triggers:
     - template:
