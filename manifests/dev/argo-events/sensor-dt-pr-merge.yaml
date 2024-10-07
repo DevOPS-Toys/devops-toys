@@ -16,11 +16,11 @@ spec:
             type: string
             value:
               - closed
-  #         - path: pull_request.merged
-  #           type: bool
-  #           value:
-  #             - true
-  # triggers:
+          # - path: pull_request.merged
+          #   type: bool
+          #   value:
+          #     - true
+  triggers:
     - template:
         name: github-pr-closed-workflow-trigger
         k8s:
