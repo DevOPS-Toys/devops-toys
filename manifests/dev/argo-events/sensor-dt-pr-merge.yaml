@@ -15,8 +15,8 @@ spec:
           - path: body.action
             type: string
             value: closed
-          - path: body.pull_request.merged
-            type: string
+          - path: body.merged
+            type: bool
             value: true
   triggers:
     - template:
