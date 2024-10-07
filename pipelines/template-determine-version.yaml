@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: determine-version
+spec:
+  entrypoint: main
+  serviceAccountName: workflow
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: determine-version
+            template: determine-version
+
+    - name: determine-version
+      script:
+        image: python:3-slim
+        command: [python]
+        source: |
+          import os
+          pr_title = "{{workflow.parameters.pr_title}}".lower()
+          if pr_title.startswith('feat:'):
+              version_type = 'minor'
+          elif pr_title.startswith('breaking change:'):
+              version_type = 'major'
+          elif pr_title.startswith(('fix:', 'doc:', 'perf:', 'refactor:')):
+              version_type = 'patch'
+          else:
+              version_type = 'patch'
+          with open('/tmp/version_type.txt', 'w') as f:
+              f.write(version_type)
+      outputs:
+        parameters:
+          - name: version_type
+            valueFrom:
+              path: /tmp/version_type.txt

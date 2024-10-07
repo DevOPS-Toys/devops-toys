@@ -1,0 +1,6 @@
+nameOverride: grafana-agent
+fullnameOverride: grafana-agent
+agent:
+  mode: 'flow'
+  clustering:
+    enabled: true

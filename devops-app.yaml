@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devops-app
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    notifications.argoproj.io/subscribe.on-deployed.github: ""
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/devops-toys/devops-toys.git
+    targetRevision: v1.0.0-rc.2
+    path: applicationsets
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=false
+      - FailOnSharedResource=true
+      - RespectIgnoreDifferences=true
+      - PruneLast=true 
+    automated: 
+      prune: true 
+      selfHeal: true

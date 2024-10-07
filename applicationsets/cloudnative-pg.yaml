@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cloudnative-pg
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: dev
+        url: https://kubernetes.default.svc
+        revision: dev
+  template:
+    metadata:
+      name: '{{cluster}}-cloudnative-pg'
+    spec:
+      project: core
+      destination:
+        namespace: cnpg-system
+        server: '{{url}}'
+      sources:
+        - repoURL: https://cloudnative-pg.github.io/charts
+          chart: cloudnative-pg
+          targetRevision: 0.*.*
+          helm:
+            releaseName: cnpg
+            valueFiles:
+              - $values/values/{{cluster}}/cloudnative-pg/values.yaml
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          targetRevision: '{{revision}}'
+          ref: values
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - FailOnSharedResource=true
+          - RespectIgnoreDifferences=true
+          - PruneLast=true

@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: prometheus-operator-crds
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: dev
+        url: https://kubernetes.default.svc
+        revision: dev
+  template:
+    metadata:
+      name: '{{cluster}}-prometheus-operator-crds'
+    spec:
+      project: monitoring
+      destination:
+        namespace: monitoring
+        server: '{{url}}'
+      sources:
+        - repoURL: https://prometheus-community.github.io/helm-charts
+          chart: prometheus-operator-crds
+          targetRevision: 7.*.*
+          helm:
+            releaseName: prometheus-operator-crds
+            valueFiles:
+              - $values/values/{{cluster}}/prometheus-operator-crds/values.yaml
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          targetRevision: '{{revision}}'
+          ref: values
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - FailOnSharedResource=true
+          - RespectIgnoreDifferences=true
+          - PruneLast=true

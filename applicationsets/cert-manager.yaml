@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cert-manager
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: dev
+        url: https://kubernetes.default.svc
+        revision: dev
+  template:
+    metadata:
+      name: '{{cluster}}-cert-manager'
+    spec:
+      project: core
+      destination:
+        namespace: cert-manager
+        server: '{{url}}'
+      sources:
+        - repoURL: https://charts.jetstack.io
+          chart: cert-manager
+          targetRevision: v1.*.*
+          helm:
+            releaseName: cert-manager
+            valueFiles:
+              - $values/values/{{cluster}}/cert-manager/values.yaml
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          targetRevision: '{{revision}}'
+          ref: values
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          path: manifests/{{cluster}}/cert-manager
+          targetRevision: '{{revision}}'
+        # - repoURL: https://aureq.github.io/cert-manager-webhook-ovh/
+        #   chart: cert-manager-webhook-ovh
+        #   targetRevision: 0.4.2
+        #   helm:
+        #     releaseName: cm-webhook-ovh
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=false
+          - FailOnSharedResource=true
+          - RespectIgnoreDifferences=true
+          - PruneLast=true

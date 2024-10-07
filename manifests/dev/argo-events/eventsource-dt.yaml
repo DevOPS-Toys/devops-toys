@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: dt
+spec:
+  service:
+    ports:
+    - port: 12000
+      targetPort: 12000
+  github:
+    pull_request:
+      repositories:
+        - owner: devops-toys
+          names:
+            - devops-toys
+      webhook:
+        endpoint: /dt
+        port: "12000"
+        method: POST
+        url: https://events-dev.devopslaboratory.org
+      events:
+        - "*"
+      apiToken:
+        name: gh-token-dt
+        key: token
+      insecure: false
+      active: true
+      contentType: json
+      webhookSecret:
+        name: webhook-secret-dt
+        key: secret

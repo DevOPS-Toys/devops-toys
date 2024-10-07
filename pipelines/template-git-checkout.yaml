@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: git-checkout
+spec:
+  serviceAccountName: workflow
+  entrypoint: main
+  templates:
+  - name: main
+    dag:
+      tasks:
+        - name: git-checkout
+          template: git-checkout
+
+  - name: git-checkout
+    retryStrategy:
+      limit: "2"
+      retryPolicy: "Always"
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args:
+        - |
+          set -eu
+          apk --update add git
+
+          cd /tmp
+          git clone https://github.com/{{workflow.parameters.organization}}/{{workflow.parameters.app_repo}}.git
+          cd {{workflow.parameters.app_repo}}
+
+          git config --global --add safe.directory /tmp/{{workflow.parameters.app_repo}}
+          git config --global user.email "{{workflow.parameters.github_user_email}}"
+          git config --global user.name "{{workflow.parameters.github_user_name}}"
+
+          git checkout {{workflow.parameters.target_branch}}
+      resources:
+        requests:
+          memory: 250Mi
+          cpu: 4m
+    outputs:
+      artifacts:
+        - name: git_repo
+          path: /tmp/{{workflow.parameters.app_repo}}
+    activeDeadlineSeconds: 1200

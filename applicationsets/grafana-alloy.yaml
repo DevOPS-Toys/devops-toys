@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: grafana-alloy
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "9"
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: dev
+        url: https://kubernetes.default.svc
+        revision: dev
+  template:
+    metadata:
+      name: '{{cluster}}-grafana-alloy'
+    spec:
+      project: monitoring
+      destination:
+        namespace: grafana-alloy
+        server: '{{url}}'
+      sources:
+        - repoURL: https://grafana.github.io/helm-charts
+          path: grafana
+          chart: alloy
+          targetRevision: 0.*.*
+          helm:
+            releaseName: grafana-alloy
+            valueFiles:
+              - $values/values/{{cluster}}/grafana-alloy/values.yaml
+        - repoURL: https://github.com/devops-toys/devops-toys.git
+          targetRevision: '{{revision}}'
+          ref: values
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - FailOnSharedResource=true
+          - RespectIgnoreDifferences=true
+          - PruneLast=true

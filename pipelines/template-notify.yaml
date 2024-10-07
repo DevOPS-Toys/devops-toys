@@ -1,0 +1,102 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: notify
+spec:
+  entrypoint: main
+  serviceAccountName: workflow
+  templates:
+  - name: main
+    inputs:
+      parameters:
+        - name: state
+    dag:
+      tasks:
+        - name: print
+          template: print
+        - name: notify-github
+          template: github-notifier
+          arguments:
+            parameters:
+              - name: state
+                value: "{{inputs.parameters.state}}"
+              - name: app_repo
+                value: "{{workflow.parameters.app_repo}}"
+              - name: git_sha
+                value: "{{workflow.parameters.sha}}"
+              - name: target_url
+                value: "https://ci-dev.devopslaboratory.org/workflows/{{workflow.namespace}}/{{workflow.name}}"
+              - name: context
+                value: "Status: "
+              - name: description
+                value: "To view the pipeline click on Details"
+              - name: organisation
+                value: "{{workflow.parameters.organization}}"
+              - name: token_file
+                value: "/.github/token"
+
+  - name: print
+    script:
+      image: alpine:latest
+      command: [sh]
+      source: |
+        echo "Pull Request Details:"
+        echo "----------------------"
+        echo "PR Number      : {{workflow.parameters.pr_number}}"
+        echo "Title          : {{workflow.parameters.pr_title}}"
+        echo "Url            : {{workflow.parameters.pr_url}}"
+        echo "Author         : {{workflow.parameters.pr_user}}"
+        echo "SHA            : {{workflow.parameters.sha}}"
+        echo "Short SHA      : {{workflow.parameters.short_sha}}"
+        echo "Source Branch  : {{workflow.parameters.branch}}"
+        echo "Target Branch  : {{workflow.parameters.target_branch}}"
+        echo "App Repo       : {{workflow.parameters.app_repo}}"
+        echo "Organisation   : {{workflow.parameters.organization}}"
+      resources:
+        requests:
+          memory: 8Mi
+          cpu: 1m
+      activeDeadlineSeconds: 30
+
+  - name: github-notifier
+    retryStrategy:
+      limit: "2"
+      retryPolicy: "Always"
+    inputs:
+      parameters:
+      - name: state
+      - name: target_url
+      - name: description
+      - name: context
+      - name: app_repo
+      - name: git_sha
+      - name: token_file
+      - name: organisation
+    container:
+      image: ghcr.io/crumbhole/ci-github-notifier:stable
+      imagePullPolicy: Always
+      env:
+        - name: state
+          value: "{{inputs.parameters.state}}"
+        - name: target_url
+          value: "{{inputs.parameters.target_url}}"
+        - name: description
+          value: "{{inputs.parameters.description}}"
+        - name: context
+          value: "{{inputs.parameters.context}}"
+        - name: tokenFile
+          value: "{{inputs.parameters.token_file}}"
+        - name: organisation
+          value: "{{inputs.parameters.organisation}}"
+        - name: app_repo
+          value: "{{inputs.parameters.app_repo}}"
+        - name: git_sha
+          value: "{{inputs.parameters.git_sha}}"
+      resources:
+        requests:
+          memory: 8Mi
+          cpu: 1m
+      volumeMounts:
+        - name: git-credentials
+          mountPath: /.github/
+      activeDeadlineSeconds: 300

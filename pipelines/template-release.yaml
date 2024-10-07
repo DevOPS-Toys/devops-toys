@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: create-prelease
+spec:
+  entrypoint: main
+  serviceAccountName: workflow
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: create-prelease
+            template: create-prelease
+          
+    - name: create-prelease
+      inputs:
+        artifacts:
+          - name: git_repo
+            path: /tmp/{{workflow.parameters.app_repo}}
+      container:
+        env:
+          - name: GIT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: git-credentials
+                key: username
+          - name: GH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: git-credentials
+                key: token
+          - name: CI
+            value: "true"
+        image: node:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            cd /tmp/{{workflow.parameters.app_repo}}
+            # apt-get update
+            # apt-get -y install git
+            # pip install python-semantic-release
+
+            echo "git config"
+            git config --global user.email "tomasz@wostal.eu"
+            git config --global user.name "Tomasz Wostal"
+            git remote set-url origin https://$GH_TOKEN@github.com/{{workflow.parameters.organization}}/{{workflow.parameters.app_repo}}.git
+
+            npm install
+            npx semantic-release
+
+            # semantic-release version
+            # semantic-release publish
