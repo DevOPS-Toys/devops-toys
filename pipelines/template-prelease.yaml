@@ -43,6 +43,7 @@ spec:
             echo "git config"
             git config --global user.email "tomasz@wostal.eu"
             git config --global user.name "Tomasz Wostal"
+            git remote set-url origin https://$GH_TOKEN@github.com/{{workflow.parameters.organization}}/{{workflow.parameters.app_repo}}.git
 
             npm install
             npx semantic-release
