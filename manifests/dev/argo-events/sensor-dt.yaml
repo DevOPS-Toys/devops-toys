@@ -21,12 +21,6 @@ spec:
               - edited
               - reopened
               - synchronize
-          - type: expression
-            exprs:
-              - expr: "!title.contains('[skip-ci]')"
-                fields:
-                  - name: title
-                    path: body.pull_request.title
   triggers:
     - template:
         name: github-pr-workflow-trigger
