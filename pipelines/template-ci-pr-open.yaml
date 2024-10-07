@@ -53,6 +53,36 @@ spec:
             templateRef:
               name: git-checkout-pr
               template: git-checkout-pr
+          - name: notify-success
+            templateRef:
+              name: notify
+              template: main
+            arguments:
+              parameters:
+                - name: state
+                  value: success
+            when: "{{workflow.status}} == Succeeded"
+            depends: git-checkout-pr
+          - name: notify-error
+            templateRef:
+              name: notify
+              template: main
+            arguments:
+              parameters:
+                - name: state
+                  value: error
+            when: "{{workflow.status}} == Error"
+            depends: git-checkout-pr
+          - name: notify-failure
+            templateRef:
+              name: notify
+              template: main
+            arguments:
+              parameters:
+                - name: state
+                  value: failure
+            when: "{{workflow.status}} == Failed"
+            depends: git-checkout-pr
           # - name: determine-version
           #   templateRef:
           #     name: determine-version
