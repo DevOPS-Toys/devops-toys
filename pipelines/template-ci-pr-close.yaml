@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: ci-devops-app
+  name: ci-devops-app-release
 spec:
   serviceAccountName: workflow
   podGC:
@@ -49,10 +49,10 @@ spec:
               parameters:
                 - name: state
                   value: pending
-          - name: git-checkout-pr
+          - name: git-checkout
             templateRef:
-              name: git-checkout-pr
-              template: git-checkout-pr
+              name: git-checkout
+              template: git-checkout
           # - name: determine-version
           #   templateRef:
           #     name: determine-version
@@ -64,6 +64,6 @@ spec:
             arguments:
               artifacts:
                 - name: git_repo
-                  from: "{{tasks.git-checkout-pr.outputs.artifacts.git_repo}}"
-            depends: git-checkout-pr
+                  from: "{{tasks.git-checkout.outputs.artifacts.git_repo}}"
+            depends: git-checkout
 
