@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/devops-toys/devops-toys/compare/v1.1.3...v1.2.0) (2024-10-07)
+
+
+### Features
+
+* add pr status check ([#12](https://github.com/devops-toys/devops-toys/issues/12)) ([3d9e687](https://github.com/devops-toys/devops-toys/commit/3d9e68785014e7d1d545bb01f3ba6970562ab096))
+
 ## [1.1.3](https://github.com/devops-toys/devops-toys/compare/v1.1.2...v1.1.3) (2024-10-07)
 
 
