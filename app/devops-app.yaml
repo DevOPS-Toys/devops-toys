@@ -5,22 +5,15 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
-    notifications.argoproj.io/subscribe.on-deployed.github: ""
+    notifications.argoproj.io/subscribe.on-deployed-devops-app.github: ""
 spec:
   project: default
   sources:
     - repoURL: https://github.com/devops-toys/devops-toys.git
-<<<<<<< HEAD
-      targetRevision: v1.1.0
-      path: applicationsets
-    - repoURL: https://github.com/devops-toys/devops-toys.git
-      targetRevision: v1.1.0
-=======
       targetRevision: v1.1.1
       path: applicationsets
     - repoURL: https://github.com/devops-toys/devops-toys.git
       targetRevision: v1.1.1
->>>>>>> b45aacd (fix: versions)
       path: app
   destination:
     server: https://kubernetes.default.svc
