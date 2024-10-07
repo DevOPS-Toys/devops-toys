@@ -19,6 +19,14 @@ spec:
             path: /tmp/{{workflow.parameters.app_repo}}
       container:
         env:
+          - name: GIT_AUTHOR_NAME
+            value: "Tomasz Wostal"
+          - name: GIT_AUTHOR_EMAIL
+            value: "tomasz@wostal.eu"
+          - name: GIT_COMMITTER_NAME
+            value: "Tomasz Wostal"
+          - name: GIT_COMMITTER_EMAIL
+            value: "tomasz@wostal.eu"
           - name: GIT_USERNAME
             valueFrom:
               secretKeyRef:
@@ -36,11 +44,7 @@ spec:
         args:
           - |
             cd /tmp/{{workflow.parameters.app_repo}}
-            # apt-get update
-            # apt-get -y install git
-            # pip install python-semantic-release
 
-            echo "git config"
             git config --global user.email "tomasz@wostal.eu"
             git config --global user.name "Tomasz Wostal"
             git remote set-url origin https://$GH_TOKEN@github.com/{{workflow.parameters.organization}}/{{workflow.parameters.app_repo}}.git
@@ -48,5 +52,3 @@ spec:
             npm install
             npx semantic-release
 
-            # semantic-release version
-            # semantic-release publish

@@ -1,9 +1,9 @@
 module.exports = {
   branches: ["main", "next"],
   plugins: [
+    '@semantic-release/github',
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
-    // Wtyczki specyficzne dla gałęzi 'main'
     [
       '@semantic-release/changelog',
       {
