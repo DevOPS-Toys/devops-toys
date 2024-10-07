@@ -24,12 +24,12 @@ spec:
           - path: body.pull_request.title
             type: string
             value:
-              - "(?i)^feat:.*"
-              - "(?i)^breaking change:.*"
-              - "(?i)^fix:.*"
-              - "(?i)^doc:.*"
-              - "(?i)^perf:.*"
-              - "(?i)^refactor:.*"
+              - "(?i)^(?!.*\\[skip-ci\\]).*feat:.*"
+              - "(?i)^(?!.*\\[skip-ci\\]).*breaking change:.*"
+              - "(?i)^(?!.*\\[skip-ci\\]).*fix:.*"
+              - "(?i)^(?!.*\\[skip-ci\\]).*doc:.*"
+              - "(?i)^(?!.*\\[skip-ci\\]).*perf:.*"
+              - "(?i)^(?!.*\\[skip-ci\\]).*refactor:.*"
   triggers:
     - template:
         name: github-pr-workflow-trigger
