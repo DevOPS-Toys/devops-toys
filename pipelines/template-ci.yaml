@@ -53,11 +53,10 @@ spec:
             templateRef:
               name: git-checkout-pr
               template: git-checkout-pr
-          - name: determine-version
-            templateRef:
-              name: determine-version
-              template: determine-version
-            depends: git-checkout-pr
+          # - name: determine-version
+          #   templateRef:
+          #     name: determine-version
+          #     template: determine-version
           - name: create-prelease
             templateRef:
               name: create-prelease
@@ -69,5 +68,5 @@ spec:
               parameters:
                 - name: version_type
                   value: "{{tasks.determine-version.outputs.parameters.version_type}}"
-            depends: determine-version
+            depends: git-checkout-pr
 

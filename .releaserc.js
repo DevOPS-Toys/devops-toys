@@ -39,7 +39,7 @@ module.exports = {
           [
             '@semantic-release/git',
             {
-              assets: ['devops-app.yaml'],
+              assets: ['devops-app.yaml', 'applicationsets/**/*.yaml'],
               message:
                 'chore(pre-release): ${nextRelease.version} [skip ci]',
             },
