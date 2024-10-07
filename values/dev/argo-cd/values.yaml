@@ -141,14 +141,14 @@ notifications:
       appID: "1015830"
       installationID: "55589468"
       privateKey: $github-privateKey
-    trigger.on-deployed: |
+    trigger.on-deployed-devops-aoo: |
       - description: Application is synced and healthy. Triggered once per commit.
         # oncePer: app.status.operationState.syncResult.revision
         send:
-          - app-deployed
+          - devops-app-deployed
         when: app.status.operationState.phase in ['Succeeded'] and
           app.status.health.status == 'Healthy'
-    template.app-deployed: |
+    template.devops-app-deployed: |
       message: |
         Application {{.app.metadata.name}} is now running new version of deployments manifests.
       github:
@@ -161,12 +161,12 @@ notifications:
         deployment:
           state: success
           environment: dev
-          environmentURL: "https://{{.app.metadata.name}}.example.com"
+          environmentURL: "https://cd-dev.devopslaboratory.org/"
           logURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
           requiredContexts: []
           autoMerge: true
-          transientEnvironment: false
-          reference: v0.1
+          transientEnvironment: true
+          reference: v1.0.0
         pullRequestComment:
           content: |
             Application {{.app.metadata.name}} is now running new version of deployments manifests.
