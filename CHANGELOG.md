@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/devops-toys/devops-toys/compare/v1.2.0...v1.2.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* fix release ([#14](https://github.com/devops-toys/devops-toys/issues/14)) ([a748878](https://github.com/devops-toys/devops-toys/commit/a748878e649065df9dd58b485d44f5b9ae9fb1e3))
+
 # [1.2.0](https://github.com/devops-toys/devops-toys/compare/v1.1.3...v1.2.0) (2024-10-07)
 
 
