@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/devops-toys/devops-toys/compare/v1.1.2...v1.1.3) (2024-10-07)
+
+
+### Bug Fixes
+
+* pipelines ([#11](https://github.com/devops-toys/devops-toys/issues/11)) ([e2b015f](https://github.com/devops-toys/devops-toys/commit/e2b015f970f16b95af54ee30d4b3b12a82607e91))
+
 ## [1.1.2](https://github.com/devops-toys/devops-toys/compare/v1.1.1...v1.1.2) (2024-10-07)
 
 
