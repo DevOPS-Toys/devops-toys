@@ -21,8 +21,6 @@ configs:
     create: true
     exec.enabled: true
     statusbadge.enabled: true
-    # accounts.watcher: login,apiKey
-    # accounts.watcher.enabled: "true"
     dex.config: |
       connectors:
         - type: google
@@ -59,11 +57,11 @@ controller:
   metrics:
     enabled: true
     serviceMonitor:
-      enabled: false
-      # labels:
-      #   release: prometheus
-      # selector:
-      #   release: prometheus
+      enabled: true
+      labels:
+        release: prometheus
+      selector:
+        release: prometheus
 dex:
   enabled: true
   env:
@@ -123,9 +121,9 @@ server:
 applicationSet:
   enabled: true
   metrics:
-    enabled: false
+    enabled: true
     serviceMonitor:
-      enabled: false
+      enabled: true
       labels:
         release: prometheus
       selector:
@@ -141,7 +139,7 @@ notifications:
       appID: "1015830"
       installationID: "55589468"
       privateKey: $github-privateKey
-    trigger.on-deployed-devops-aoo: |
+    trigger.on-deployed-devops-app: |
       - description: Application is synced and healthy. Triggered once per commit.
         oncePer: app.status.operationState.syncResult.revision
         send:
