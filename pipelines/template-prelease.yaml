@@ -31,18 +31,21 @@ spec:
               secretKeyRef:
                 name: git-credentials
                 key: token
-        image: python:3-slim
-        command: [sh, -c]
+        image: node:latest
+        command: ["/bin/sh", "-c"]
         args:
           - |
             cd /tmp/{{workflow.parameters.app_repo}}
-            apt-get update
-            apt-get -y install git
-            pip install python-semantic-release
+            # apt-get update
+            # apt-get -y install git
+            # pip install python-semantic-release
 
             echo "git config"
             git config --global user.email "tomasz@wostal.eu"
             git config --global user.name "Tomasz Wostal"
 
-            semantic-release version
-            semantic-release publish
+            npm install
+            npx semantic-release
+
+            # semantic-release version
+            # semantic-release publish

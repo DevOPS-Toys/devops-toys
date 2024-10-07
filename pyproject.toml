@@ -16,5 +16,5 @@ major_on_zero = true
 allow_zero_version = true
 no_git_verify = false
 tag_format = "v{version}"
-version_pattern = ["app/devops-app.yaml:targetRevision: {version}"]
+version_pattern = ["devops-app.yaml:targetRevision: {version}"]
 no_version_file_update = false
