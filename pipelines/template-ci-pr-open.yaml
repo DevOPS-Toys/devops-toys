@@ -4,6 +4,7 @@ metadata:
   name: ci-devops-app
 spec:
   serviceAccountName: workflow
+  onExit: exit-handler
   podGC:
     strategy: OnWorkflowCompletion
     deleteDelayDuration: 30m
@@ -53,7 +54,10 @@ spec:
             templateRef:
               name: git-checkout-pr
               template: git-checkout-pr
-          - name: notify-success
+
+    - name: exit-handler
+      steps:
+        - - name: notify-success
             templateRef:
               name: notify
               template: main
@@ -62,18 +66,7 @@ spec:
                 - name: state
                   value: success
             when: "{{workflow.status}} == Succeeded"
-            depends: git-checkout-pr
-          - name: notify-error
-            templateRef:
-              name: notify
-              template: main
-            arguments:
-              parameters:
-                - name: state
-                  value: error
-            when: "{{workflow.status}} == Error"
-            depends: git-checkout-pr
-          - name: notify-failure
+        - - name: notify-failure
             templateRef:
               name: notify
               template: main
@@ -82,18 +75,12 @@ spec:
                 - name: state
                   value: failure
             when: "{{workflow.status}} == Failed"
-            depends: git-checkout-pr
-          # - name: determine-version
-          #   templateRef:
-          #     name: determine-version
-          #     template: determine-version
-          # - name: create-prelease
-          #   templateRef:
-          #     name: create-prelease
-          #     template: create-prelease
-          #   arguments:
-          #     artifacts:
-          #       - name: git_repo
-          #         from: "{{tasks.git-checkout-pr.outputs.artifacts.git_repo}}"
-          #   depends: git-checkout-pr
-
+        - - name: notify-error
+            templateRef:
+              name: notify
+              template: main
+            arguments:
+              parameters:
+                - name: state
+                  value: error
+            when: "{{workflow.status}} == Error"
