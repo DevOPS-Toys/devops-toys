@@ -130,7 +130,7 @@ applicationSet:
         release: prometheus
 
 notifications:
-  enabled: true
+  enabled: false
   argocdUrl: https://cd-dev.devopslaboratory.org
   secret:
     create: false
@@ -155,11 +155,11 @@ notifications:
         status:
           state: success
           label: "continuous-delivery/{{.app.metadata.name}}"
-          targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+          targetURL: "https://cd-dev.devopslaboratory.org/applications/{{.app.metadata.name}}?operation=true"
         deployment:
           state: success
           environment: dev
-          environmentURL: "https://cd-dev.devopslaboratory.org/"
+          environmentURL: "https://cd-dev.devopslaboratory.org"
           logURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
           requiredContexts: []
           autoMerge: true
