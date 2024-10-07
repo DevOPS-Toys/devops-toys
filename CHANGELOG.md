@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/devops-toys/devops-toys/compare/v1.2.1...v1.3.0) (2024-10-07)
+
+
+### Features
+
+* cleanup ([#16](https://github.com/devops-toys/devops-toys/issues/16)) ([4146f5e](https://github.com/devops-toys/devops-toys/commit/4146f5e39d293dd18511652311edca0faac1b5ba))
+
 ## [1.2.1](https://github.com/devops-toys/devops-toys/compare/v1.2.0...v1.2.1) (2024-10-07)
 
 
