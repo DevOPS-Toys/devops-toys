@@ -17,8 +17,6 @@ spec:
         artifacts:
           - name: git_repo
             path: /tmp/{{workflow.parameters.app_repo}}
-        parameters:
-          - name: version_type
       container:
         env:
           - name: GIT_USERNAME
