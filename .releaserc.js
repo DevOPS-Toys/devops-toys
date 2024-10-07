@@ -16,13 +16,13 @@ module.exports = {
             '@semantic-release/exec',
             {
               prepareCmd:
-                "sed -i 's/targetRevision:.*/targetRevision: v${nextRelease.version}/' devops-app.yaml",
+                "sed -i 's/targetRevision:.*/targetRevision: v${nextRelease.version}/' app/devops-app.yaml && find applicationsets -type f -name '*.yaml' -exec sed -i 's/revision:.*/revision: v${nextRelease.version}/' {} +",
             },
           ],
           [
             '@semantic-release/git',
             {
-              assets: ['CHANGELOG.md', 'devops-app.yaml'],
+              assets: ['CHANGELOG.md', 'app/devops-app.yaml', 'applicationsets/**/*.yaml'],
               message:
                 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
             },
@@ -33,13 +33,13 @@ module.exports = {
             '@semantic-release/exec',
             {
               prepareCmd:
-                "sed -i 's/targetRevision:.*/targetRevision: v${nextRelease.version}/' devops-app.yaml && find applicationsets -type f -name '*.yaml' -exec sed -i 's/revision:.*/revision: v${nextRelease.version}/' {} +",
+                "sed -i 's/targetRevision:.*/targetRevision: v${nextRelease.version}/' app/devops-app.yaml && find applicationsets -type f -name '*.yaml' -exec sed -i 's/revision:.*/revision: v${nextRelease.version}/' {} +",
             },
           ],
           [
             '@semantic-release/git',
             {
-              assets: ['devops-app.yaml', 'applicationsets/**/*.yaml'],
+              assets: ['app/devops-app.yaml', 'applicationsets/**/*.yaml'],
               message:
                 'chore(pre-release): ${nextRelease.version} [skip ci]',
             },
