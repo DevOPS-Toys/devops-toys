@@ -110,8 +110,8 @@ spec:
                 dependencyName: github-pull-request
                 dataKey: body.repository.owner.login
               dest: spec.arguments.parameters.10.value
-            - src:
-                dependencyName: github-pull-request
-                dataTemplate: 'release-{{ .Input.body.pull_request.number }}-{{ .Input.body.repository.name}}-{{ .Input.body.pull_request.head.sha | substr 0 7 }}'
-              dest: metadata.name
-              operation: append
+            # - src:
+            #     dependencyName: github-pull-request
+            #     dataTemplate: 'release-{{ .Input.body.pull_request.number }}-{{ .Input.body.repository.name}}-{{ .Input.body.pull_request.head.sha | substr 0 7 }}'
+            #   dest: metadata.name
+            #   operation: append
