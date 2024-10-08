@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/devops-toys/devops-toys/compare/v1.3.0...v1.4.0) (2024-10-08)
+
+
+### Features
+
+* disable notifications ([#17](https://github.com/devops-toys/devops-toys/issues/17)) ([6578053](https://github.com/devops-toys/devops-toys/commit/657805310e4e1618ba7b5e9d6ec2bb5f9c26747e))
+
 # [1.3.0](https://github.com/devops-toys/devops-toys/compare/v1.2.1...v1.3.0) (2024-10-07)
 
 
