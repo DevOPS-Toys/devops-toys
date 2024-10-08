@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/devops-toys/devops-toys/compare/v1.6.0...v1.6.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* notifications template ([#23](https://github.com/devops-toys/devops-toys/issues/23)) ([40c5f49](https://github.com/devops-toys/devops-toys/commit/40c5f49132c0a99fd31e9a571fe92c58aaed89a7))
+
 # [1.6.0](https://github.com/devops-toys/devops-toys/compare/v1.5.1...v1.6.0) (2024-10-08)
 
 
