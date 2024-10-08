@@ -8,10 +8,10 @@ metadata:
     notifications.argoproj.io/subscribe.on-deployed.github: ""
 spec:
   project: default
-  sources:
-    - repoURL: https://github.com/devops-toys/devops-toys.git
-      targetRevision: v1.6.3
-      path: applicationsets
+  source:
+    repoURL: https://github.com/devops-toys/devops-toys.git
+    targetRevision: v1.6.3
+    path: applicationsets
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
