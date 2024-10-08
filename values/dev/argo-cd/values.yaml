@@ -141,7 +141,7 @@ notifications:
       privateKey: $github-privateKey
     trigger.on-deployed: |
       - description: Application is synced and healthy. Triggered once per commit.
-        oncePer: app.status.operationState.syncResult.revision
+        # oncePer: app.status.operationState.syncResult.revision
         send:
           - app-deployed
         when: app.status.operationState.phase in ['Succeeded'] and
@@ -159,11 +159,11 @@ notifications:
         deployment:
           state: success
           environment: production
-          environmentURL: "https://{{.app.metadata.name}}.example.com"
+          environmentURL: "https://cd-dev.devopslaboratory.org"
           logURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
           requiredContexts: []
           autoMerge: true
-          transientEnvironment: false
+          transientEnvironment: true
           reference: v1.0.0
         pullRequestComment:
           content: |
