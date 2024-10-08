@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/devops-toys/devops-toys/compare/v1.9.0...v1.10.0) (2024-10-08)
+
+
+### Features
+
+* gh notifications last change ([#32](https://github.com/devops-toys/devops-toys/issues/32)) ([a51a97d](https://github.com/devops-toys/devops-toys/commit/a51a97dbf76aa5b58f7192dcfc40087b5556338e))
+
 # [1.9.0](https://github.com/devops-toys/devops-toys/compare/v1.8.0...v1.9.0) (2024-10-08)
 
 
