@@ -20,6 +20,10 @@ spec:
             type: bool
             value:
               - true
+          - path: body.head_commit.message
+            comparator: "!="
+            type: string
+            value: "*[skip ci]*"
   triggers:
     - template:
         name: github-pr-closed-workflow-trigger
