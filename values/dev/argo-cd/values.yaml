@@ -139,22 +139,18 @@ notifications:
       appID: "1015830"
       installationID: "55589468"
       privateKey: $github-privateKey
-    trigger.on-deployed-devops-app: |
+    trigger.on-deployed: |
       - description: Application is synced and healthy. Triggered once per commit.
         oncePer: app.status.operationState.syncResult.revision
         send:
-          - devops-app-deployed
+          - app-deployed
         when: app.status.operationState.phase in ['Succeeded'] and
           app.status.health.status == 'Healthy'
-    template.devops-app-deployed: |
+    template.app-deployed: |
       message: |
         Application {{.app.metadata.name}} is now running new version of deployments manifests.
-      template.devops-app-deployed: |
-  message: |
-    message: |
-    Application {{.app.metadata.name}} is now running new version of deployments manifests.
-  github:
-    status:
-      state: success
-      label: "argo-cd/{{.app.metadata.name}}"
-      targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+    github:
+      status:
+        state: success
+        label: "argo-cd/{{.app.metadata.name}}"
+        targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
