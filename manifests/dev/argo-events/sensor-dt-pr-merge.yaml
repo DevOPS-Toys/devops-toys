@@ -16,10 +16,10 @@ spec:
             type: string
             value:
               - closed
-          # - path: body.merged
-          #   type: string
-          #   value:
-          #     - true
+          - path: body.merged
+            type: bool
+            value:
+              - "true"
   triggers:
     - template:
         name: github-pr-closed-workflow-trigger
