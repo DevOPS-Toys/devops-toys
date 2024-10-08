@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/devops-toys/devops-toys/compare/v1.14.0...v1.15.0) (2024-10-08)
+
+
+### Features
+
+* Update test.txt ([#43](https://github.com/devops-toys/devops-toys/issues/43)) ([ec1bb57](https://github.com/devops-toys/devops-toys/commit/ec1bb57a916690cf06eb67a8d01415187b394b78))
+
 # [1.14.0](https://github.com/devops-toys/devops-toys/compare/v1.13.0...v1.14.0) (2024-10-08)
 
 
