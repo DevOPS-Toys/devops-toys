@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/devops-toys/devops-toys/compare/v1.10.0...v1.11.0) (2024-10-08)
+
+
+### Features
+
+* update sensors ([#33](https://github.com/devops-toys/devops-toys/issues/33)) ([e8ea72d](https://github.com/devops-toys/devops-toys/commit/e8ea72d13dd300d386d84e4ef3c2888253a20f92))
+
 # [1.10.0](https://github.com/devops-toys/devops-toys/compare/v1.9.0...v1.10.0) (2024-10-08)
 
 
