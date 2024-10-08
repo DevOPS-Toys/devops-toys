@@ -31,7 +31,7 @@ spec:
               apiVersion: argoproj.io/v1alpha1
               kind: Workflow
               metadata:
-                generateName: github-pr-workflow-
+                name: github-pr-workflow
                 namespace: argo
               spec:
                 serviceAccountName: workflow
@@ -107,3 +107,8 @@ spec:
                 dependencyName: github-pull-request
                 dataKey: body.repository.owner.login
               dest: spec.arguments.parameters.9.value
+            - src:
+              dependencyName: github-pull-request
+              dataTemplate: 'build-{{ .Input.body.pull_request.number }}-{{ .Input.body.repository.name}}-{{ .Input.body.pull_request.head.sha | substr 0 7 }}'
+            dest: metadata.name
+            operation: append
