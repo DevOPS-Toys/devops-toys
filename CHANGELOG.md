@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/devops-toys/devops-toys/compare/v1.15.0...v1.16.0) (2024-10-08)
+
+
+### Features
+
+* Update sensor-dt-pr-merge.yaml ([#44](https://github.com/devops-toys/devops-toys/issues/44)) ([c72ebe9](https://github.com/devops-toys/devops-toys/commit/c72ebe9b673d03fe4ecfd962d714ec3d3023e381))
+
 # [1.15.0](https://github.com/devops-toys/devops-toys/compare/v1.14.0...v1.15.0) (2024-10-08)
 
 
