@@ -20,6 +20,10 @@ spec:
             type: bool
             value:
               - true
+          - path: body.head_commit.message
+            comparator: "!="
+            type: string
+            value: "*[skip ci]*"
   triggers:
     - template:
         name: github-pr-closed-workflow-trigger
@@ -30,7 +34,7 @@ spec:
               apiVersion: argoproj.io/v1alpha1
               kind: Workflow
               metadata:
-                generateName: github-pr-release-
+                name: github-pr-release
                 namespace: argo
               spec:
                 serviceAccountName: workflow
@@ -110,3 +114,8 @@ spec:
                 dependencyName: github-pull-request
                 dataKey: body.repository.owner.login
               dest: spec.arguments.parameters.10.value
+            - src:
+              dependencyName: github-pull-request
+              dataTemplate: 'release-{{ .Input.body.pull_request.number }}-{{ .Input.body.repository.name}}-{{ .Input.body.pull_request.head.sha | substr 0 7 }}'
+            dest: metadata.name
+            operation: append
