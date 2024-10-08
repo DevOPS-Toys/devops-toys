@@ -164,7 +164,7 @@ notifications:
           requiredContexts: []
           autoMerge: true
           transientEnvironment: true
-          reference: v1.0.0
+          reference: "{{.app.spec.source.targetRevision}}"
         pullRequestComment:
           content: |
             Application {{.app.metadata.name}} is now running new version of deployments manifests.
