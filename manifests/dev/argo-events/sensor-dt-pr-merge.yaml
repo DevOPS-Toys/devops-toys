@@ -16,7 +16,7 @@ spec:
             type: string
             value:
               - closed
-          - path: body.merged
+          - path: pull_request.merged
             type: bool
             value:
               - "true"
