@@ -16,8 +16,6 @@ spec:
             type: string
             value:
               - opened
-              - unlabeled
-              - labeled
               - edited
               - reopened
               - synchronize
