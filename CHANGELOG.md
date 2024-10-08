@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/devops-toys/devops-toys/compare/v1.11.0...v1.11.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* sensors ([#34](https://github.com/devops-toys/devops-toys/issues/34)) ([c62bee6](https://github.com/devops-toys/devops-toys/commit/c62bee67c5f8d02b40033fab2550db9d622e0c99)), closes [#33](https://github.com/devops-toys/devops-toys/issues/33)
+
 # [1.11.0](https://github.com/devops-toys/devops-toys/compare/v1.10.0...v1.11.0) (2024-10-08)
 
 
