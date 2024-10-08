@@ -1,3 +1,12 @@
+## [1.4.1](https://github.com/devops-toys/devops-toys/compare/v1.4.0...v1.4.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* notifications ([01a1241](https://github.com/devops-toys/devops-toys/commit/01a12413afd580d3ab7c3da5ffcfc1dcd34c62d8))
+* notifications ([a60b298](https://github.com/devops-toys/devops-toys/commit/a60b298ef184ae62d8be9a1ea5f7c9cd5b637ae6))
+* pipelines ([7eab99d](https://github.com/devops-toys/devops-toys/commit/7eab99dddd84e727c9f8c286d1de11ddf5dae8dd))
+
 # [1.4.0](https://github.com/devops-toys/devops-toys/compare/v1.3.0...v1.4.0) (2024-10-08)
 
 
