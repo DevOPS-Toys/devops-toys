@@ -1,17 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: devops-app
+  name: bootstrap-app
   namespace: argocd
   annotations:
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
-    notifications.argoproj.io/subscribe.on-deployed-devops-app.github: ""
 spec:
   project: default
   sources:
     - repoURL: https://github.com/devops-toys/devops-toys.git
       targetRevision: HEAD
-      path: applicationsets
+      path: app
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
@@ -25,3 +24,4 @@ spec:
     automated: 
       prune: true 
       selfHeal: true
+
