@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/devops-toys/devops-toys/compare/v1.7.0...v1.8.0) (2024-10-08)
+
+
+### Features
+
+* Dev6 ([#29](https://github.com/devops-toys/devops-toys/issues/29)) ([f45c0f6](https://github.com/devops-toys/devops-toys/commit/f45c0f6d33d78eb23651c6543dfdc3a1c885ee91))
+
 # [1.7.0](https://github.com/devops-toys/devops-toys/compare/v1.6.3...v1.7.0) (2024-10-08)
 
 
