@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/devops-toys/devops-toys/compare/v1.6.2...v1.6.3) (2024-10-08)
+
+
+### Bug Fixes
+
+* Dev5 notifications ([#25](https://github.com/devops-toys/devops-toys/issues/25)) ([bcb59a8](https://github.com/devops-toys/devops-toys/commit/bcb59a88b500c4d589cb70f2ecfdb179b5a8292b))
+
 ## [1.6.2](https://github.com/devops-toys/devops-toys/compare/v1.6.1...v1.6.2) (2024-10-08)
 
 
