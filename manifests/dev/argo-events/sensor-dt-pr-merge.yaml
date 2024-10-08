@@ -19,7 +19,7 @@ spec:
           - path: body.merged
             type: bool
             value:
-              - true
+              - "true"
   triggers:
     - template:
         name: github-pr-closed-workflow-trigger
