@@ -381,7 +381,7 @@ commit-secrets:
 
 devops-app:
 	@echo "Creating DevOps App..."
-	kubectl apply -f ./app/devops-app.yaml
+	kubectl apply -f ./bootstrap-app.yaml.yaml
 
 # apply-configs:
 # 	for dir in configs/*/dev/extras; do \
