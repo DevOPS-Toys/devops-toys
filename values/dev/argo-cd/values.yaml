@@ -158,14 +158,10 @@ notifications:
           targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
         deployment:
           state: success
-          environment: production
+          environment: dev
           environmentURL: "https://cd-dev.devopslaboratory.org"
           logURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
           requiredContexts: []
           autoMerge: true
           transientEnvironment: true
           reference: "{{.app.spec.source.targetRevision}}"
-        pullRequestComment:
-          content: |
-            Application {{.app.metadata.name}} is now running new version of deployments manifests.
-            See more here: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true
