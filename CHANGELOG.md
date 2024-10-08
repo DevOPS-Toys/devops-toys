@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/devops-toys/devops-toys/compare/v1.5.1...v1.6.0) (2024-10-08)
+
+
+### Features
+
+* notifications ([#22](https://github.com/devops-toys/devops-toys/issues/22)) ([85b2e34](https://github.com/devops-toys/devops-toys/commit/85b2e348dcaf82883ecb7d1ba94590e0bae4dd94))
+
 ## [1.5.1](https://github.com/devops-toys/devops-toys/compare/v1.5.0...v1.5.1) (2024-10-08)
 
 
