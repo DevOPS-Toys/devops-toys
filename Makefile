@@ -379,9 +379,9 @@ commit-secrets:
 	git commit -m "Add valid secrets"
 	git push
 
-devops-app:
-	@echo "Creating DevOps App..."
-	kubectl apply -f ./bootstrap-app.yaml.yaml
+# devops-app:
+# 	@echo "Creating DevOps App..."
+# 	kubectl apply -f ./bootstrap-app.yaml
 
 # apply-configs:
 # 	for dir in configs/*/dev/extras; do \
