@@ -130,7 +130,7 @@ applicationSet:
         release: prometheus
 
 notifications:
-  enabled: false
+  enabled: true
   argocdUrl: https://cd-dev.devopslaboratory.org
   secret:
     create: false
