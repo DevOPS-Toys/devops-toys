@@ -29,7 +29,7 @@ spec:
               apiVersion: argoproj.io/v1alpha1
               kind: Workflow
               metadata:
-                name: build-
+                generateName: build-
                 namespace: argo
               spec:
                 serviceAccountName: workflow
