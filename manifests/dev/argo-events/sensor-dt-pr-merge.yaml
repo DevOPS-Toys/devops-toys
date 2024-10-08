@@ -113,5 +113,5 @@ spec:
             - src:
                 dependencyName: github-pull-request
                 dataTemplate: 'release-{{ .Input.body.pull_request.number }}-{{ .Input.body.repository.name}}-{{ .Input.body.pull_request.head.sha | substr 0 7 }}'
-            dest: metadata.name
-            operation: append
+              dest: metadata.name
+              operation: append
