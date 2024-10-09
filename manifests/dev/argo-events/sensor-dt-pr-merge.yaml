@@ -12,7 +12,7 @@ spec:
       eventName: pull_request
       filters:
         data:
-          - path: body.action
+          - path: action
             type: string
             value:
               - closed
